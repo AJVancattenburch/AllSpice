@@ -9,33 +9,31 @@ public class IngredientsService
     _repo = repo;
   }
 
-  internal List<Ingredient> GetAllIngredients()
-  {
-    return _repo.GetAllIngredients();
-  }
-
   internal Ingredient CreateIngredient(Ingredient ingredientData)
   {
-    return _repo.CreateIngredient(ingredientData);
+    Ingredient ingredient = _repo.CreateIngredient(ingredientData);
+    return ingredient;
+
   }
 
-  internal Ingredient GetIngredientById(int ingredientId)
+  internal Ingredient GetIngredientById (int ingredientId)
   {
     Ingredient ingredient = _repo.GetIngredientById(ingredientId);
-    if (ingredient == null)
-    {
-      throw new Exception("Invalid ingredient Id");
-    }
+    if (ingredient == null) new Exception ($"Ingredient ID: {ingredientId} is an invalid ID.");
     return ingredient;
   }
 
-  // internal Ingredient DeleteIngredient(int ingredientId, string recipeId)
-  // {
-  //   Ingredient ingredient = _repo.GetIngredientById(ingredientId);
-  //   if (ingredient.CreatorId != recipeId)
-  //   {
-  //     throw new Exception("You cannot delete another users recipe ingredients");
-  //   }
-  //   _repo.DeleteIngredient(ingredientId);
-  // }
+  internal void DeleteIngredient(int ingredientId, string userId)
+  {
+    Ingredient ingredient = GetIngredientById(ingredientId);
+    if (ingredient.CreatorId != userId) new Exception("This is not your ingredient to delete!");
+    int rows = _repo.DeleteIngredient(ingredientId);
+    if (rows > 1) throw new Exception("Something has gone terribly wrong. More than one row affected");
+  }
+
+  internal List<Ingredient> GetIngredientsByRecipeId(int recipeId)
+  {
+    List<Ingredient> ingredients = _repo.GetIngredientsByRecipeId(recipeId);
+    return ingredients;
+  }
 }

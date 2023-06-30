@@ -9,57 +9,95 @@ public class IngredientsRepository
     _db = db;
   }
 
-  internal List<Ingredient> GetAllIngredients()
-  {
-    string sql = @"
-    SELECT
-      ing.*,
-      acc.*
-    FROM ingredients ing
-    JOIN accounts acc ON ing.creatorId = acc.id;
-    ";
-    List<Ingredient> ingredients = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
-    {
-      ingredient.Creator = account;
-      return ingredient;
-    }).ToList();
-      return ingredients;
-  }
+  // internal List<Ingredient> GetAllIngredients()
+  // {
+  //   string sql = @"
+  //   SELECT
+  //     ing.*,
+  //     acc.*
+  //   FROM ingredients ing
+  //   JOIN accounts acc ON ing.creatorId = acc.id;
+  //   ";
+  //   List<Ingredient> ingredients = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
+  //   {
+  //     ingredient.Creator = account;
+  //     return ingredient;
+  //   }).ToList();
+  //     return ingredients;
+  // }
 
   internal Ingredient CreateIngredient(Ingredient ingredientData)
   {
     string sql = @"
     INSERT INTO ingredients
-    (name, quantity, recipeId)
+      (name, quantity, creatorId, recipeId)
     VALUES
-    (@name, @quantity, @recipeId);
-    SELECT LAST_INSERT_ID();
-    ";
-    int id = _db.ExecuteScalar<int>(sql, ingredientData);
-    ingredientData.Id = id;
-    return ingredientData;
+      (@name, @quantity, @creatorId, @recipeId);
+    SELECT
+    ing.*,
+    acc.*
+    FROM ingredients ing
+    JOIN accounts acc
+      ON acc.id = ing.creatorId
+    WHERE ing.id =
+      LAST_INSERT_ID()
+    ;";
+
+    Ingredient ingredient = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
+    {
+      ingredient.Creator = account;
+      return ingredient;
+    }, ingredientData).FirstOrDefault();
+    return ingredient;
+      
+  }
+
+  internal int DeleteIngredient(int ingredientId)
+  {
+    string sql = @"
+    DELETE FROM ingredients 
+    WHERE id = @ingredientId 
+    LIMIT 1;
+    ;";
+    int rows = _db.Execute(sql, new { ingredientId });
+    return rows;
   }
 
   internal Ingredient GetIngredientById(int ingredientId)
   {
     string sql = @"
     SELECT
-      ing.*,
-      acc.*
+    ing.*,
+    acc.*
     FROM ingredients ing
-    JOIN accounts creator ON ing.recipeId = creatorId
-    WHERE ing.recipeId = @ingredientId;
-    ";
-    return _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
+    JOIN accounts acc 
+      ON acc.id = ing.creatorId
+    WHERE ing.id = @ingredientId
+    ;";
+    Ingredient ingredient = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
     {
       ingredient.Creator = account;
       return ingredient;
     }, new { ingredientId }).FirstOrDefault();
+      return ingredient;
   }
 
-  // internal void DeleteIngredient(int ingredientId)
-  // {
-  //   string sql = "DELETE FROM ingredients WHERE id = @ingredientId LIMIT 1;";
-  //   _db.Execute(sql, new { ingredientId });
-  // }
+  internal List<Ingredient> GetIngredientsByRecipeId(int recipeId)
+  {
+    string sql = @"
+    SELECT
+      ing.*,
+      acc.*
+    FROM ingredients ing
+    JOIN accounts acc 
+      ON acc.id = ing.creatorId
+    WHERE ing.recipeId = @recipeId
+    ;";
+    List<Ingredient> ingredients = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
+    {
+    ingredient.Creator = account;
+    return ingredient;
+  }, new { recipeId }).ToList();
+    return ingredients;
+  }
 }

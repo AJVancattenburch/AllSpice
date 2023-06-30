@@ -18,10 +18,10 @@ CREATE TABLE IF NOT EXISTS recipes(
   creatorId VARCHAR(255) NOT NULL,
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
-  FOREIGN KEY (creatorId) REFERENCES accounts(id)
+  FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
 
-DROP TABLE recipes;
+/* DROP TABLE recipes; */
 
 CREATE TABLE IF NOT EXISTS ingredients(
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,7 +31,17 @@ CREATE TABLE IF NOT EXISTS ingredients(
   FOREIGN KEY (recipeId) REFERENCES recipes(id)
 ) default charset utf8 COMMENT '';
 
-INSERT INTO ingredients
+/* DROP TABLE ingredients; */
+
+CREATE TABLE IF NOT EXISTS favorites(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  recipeId INT NOT NULL COMMENT 'Recipe Id',
+  accountId VARCHAR(255) NOT NULL COMMENT 'Account Id',
+  FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
+  FOREIGN KEY (accountId) REFERENCES accounts(id) ON DELETE CASCADE
+) default charset utf8 COMMENT '';
+
+/* INSERT INTO ingredients
   (name, quantity, recipeId)
 VALUES
 ('Chicken', '1kg', 1),
@@ -43,17 +53,13 @@ VALUES
 ('Dried Oregano', '1tsp', 1),
 ('Dried Thyme', '1tsp', 1),
 ('Olive Oil', '2tsp', 1),
-('Parsley', '1tsp', 1);
+('Parsley', '1tsp', 1); */
 
 INSERT INTO recipes
   (title, instructions, img, category, archived, creatorId)
 VALUES
 ('Best Oven-Baked Chicken', 'Preheat oven to 425°F/220°C (200°C fan).
 Pound chicken to 1.5cm / 0.6″ at the thickest part; using a rolling pin, meat mallet or even your fist (key tip for even cooking + tender chicken). Mix Seasoning. Line tray with foil and baking / parchment paper. Place chicken upside down on tray. Drizzle chicken with about 1 tsp oil. Rub over with fingers. Sprinkle with Seasoning. Flip chicken. Drizzle with 1 tsp oil, rub with fingers, sprinkle with Seasoning, covering as much of the surface area as you can. Bake 18 minutes, or until surface is golden per photos and video, or internal temperature is 165°F/75°C using a meat thermometer. Remove from oven and immediately transfer chicken to serving plates. Wait 3 to 5 minutes before serving, garnished with freshly chopped parsley if desired. Pictured with a side of Garlic Butter Rice with Kale.', 'https://i.ibb.co/8PKj97g/oven-Baked-Chicken.jpg', 'American', false, '647fe77f07eaa2e6662ac239');
-
-/* DROP TABLE ingredients; */
-
-
 
 DELETE FROM recipes WHERE id = LAST_INSERT_ID();
 
@@ -64,6 +70,7 @@ SELECT
 * 
 FROM recipes 
 ORDER BY `createdAt` DESC;
+
 SELECT
 *
 FROM recipes
@@ -102,7 +109,20 @@ JOIN ingredients ing
 JOIN accounts creator 
   ON rec.creatorId = creator.id;
 
-/* DROP TABLE ingredients; */
 
+-- SECTION FAVORITES
 
+INSERT INTO favorites
+  (accountId, recipeId)
+VALUES
+  ('647fe77f07eaa2e6662ac239', LAST_INSERT_ID());
 
+SELECT
+fav.*
+acc.*
+rec.*
+FROM favorites fav
+JOIN accounts acc
+  ON acc.id = fav.accountId
+JOIN recipes rec
+  ON rec.id = fav.recipeId;

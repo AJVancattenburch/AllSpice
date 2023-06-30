@@ -18,7 +18,7 @@ public class RecipesRepository
     (@title, @instructions, @img, @category, @archived, @creatorId);
 
     SELECT 
-      rec.*
+      rec.*,
       creator.*
     FROM recipes rec
     JOIN accounts creator ON rec.creatorId = creator.id
@@ -70,19 +70,25 @@ public class RecipesRepository
       return recipe;
   }
 
-  internal void UpdateRecipe(Recipe recipe)
+  internal void UpdateRecipe(Recipe updateData)
   {
     string sql = @"
     UPDATE recipes
     SET
-      title = @title.
+      title = @title,
       instructions = @instructions,
       img = @img,
       category = @category,
-      archived = @archived,
-    WHERE id = @id;
-    ";
+      archived = @archived
+    WHERE id = @id
+    ;";
 
-    _db.Execute(sql, recipe);
+    _db.Execute(sql, updateData);
+  }
+
+  internal void ArchiveRecipe(int recipeId)
+  {
+    string sql = "DELETE FROM recipes WHERE id = @recipeId LIMIT 1;";
+    _db.Execute(sql, new { recipeId });
   }
 }

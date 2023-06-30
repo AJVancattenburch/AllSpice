@@ -24,55 +24,41 @@ public class IngredientsController : ControllerBase
       ingredientData.CreatorId = userInfo.Id;
 
       Ingredient ingredient = _ingredientsService.CreateIngredient(ingredientData);
-      return new ActionResult<Ingredient>(Ok(ingredient));
-    }
-    catch (Exception e)
-    {
-      return new ActionResult<Ingredient>(BadRequest(e.Message));
-    }
-  }
-
-  [HttpGet]
-  public ActionResult<List<Ingredient>> GetAllIngredients()
-  {
-    try
-    {
-      List<Ingredient> ingredients = _ingredientsService.GetAllIngredients();
-      return Ok(ingredients);
-    }
-    catch (Exception e)
-    {
-      return BadRequest(e.Message);
-    }
-  }
-
-  [HttpGet("{ingredientId}")]
-  public ActionResult<Ingredient> GetIngredientById(int ingredientId)
-  {
-    try
-    {
-      Ingredient ingredient = _ingredientsService.GetIngredientById(ingredientId);
       return Ok(ingredient);
     }
     catch (Exception e)
     {
-      return BadRequest(e.Message);
+      return new (BadRequest(e.Message));
     }
   }
 
-  // [HttpDelete("{ingredientId}")]
-  // [Authorize]
-  // public async Task<ActionResult<Ingredient>> DeleteIngredient(int ingredientId)
+  // [HttpGet]
+  // public ActionResult<List<Ingredient>> GetAllIngredients()
   // {
   //   try
   //   {
-  //     Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
-  //     _ingredientsService.DeleteIngredient(ingredientId, userInfo.Id);
-  //     return Ok("Successfully Deleted");
+  //     List<Ingredient> ingredients = _ingredientsService.GetAllIngredients();
+  //     return Ok(ingredients);
   //   }
   //   catch (Exception e)
   //   {
   //     return BadRequest(e.Message);
   //   }
   // }
+
+  [HttpDelete("{ingredientId}")]
+  [Authorize]
+  public async Task<ActionResult<Ingredient>> DeleteIngredient(int ingredientId)
+  {
+    try
+    {
+      Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
+      _ingredientsService.DeleteIngredient(ingredientId, userInfo.Id);
+      return Ok("Successfully Deleted");
+    }
+    catch (Exception e)
+    {
+      return BadRequest(e.Message);
+    }
+  }
 }

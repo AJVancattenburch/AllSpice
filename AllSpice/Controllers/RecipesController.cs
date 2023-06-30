@@ -5,12 +5,14 @@ namespace AllSpice.Controllers;
 public class RecipesController : ControllerBase
 {
   private readonly RecipesService _recipesService;
+  private readonly IngredientsService _ingredientsService;
   private readonly Auth0Provider _auth;
 
-  public RecipesController(RecipesService recipesService, Auth0Provider auth)
+  public RecipesController(RecipesService recipesService, Auth0Provider auth, IngredientsService ingredientsService)
   {
     _recipesService = recipesService;
     _auth = auth;
+    _ingredientsService = ingredientsService;
   }
   
   [HttpPost]
@@ -60,6 +62,20 @@ public class RecipesController : ControllerBase
     }
   }
 
+  [HttpGet("{recipeId}/ingredients")]
+  public ActionResult<List<Ingredient>> GetIngredientsByRecipeId(int recipeId)
+  {
+    try
+    {
+      List<Ingredient> ingredients = _ingredientsService.GetIngredientsByRecipeId(recipeId);
+      return Ok(ingredients);
+    }
+    catch (Exception e)
+    {
+      return BadRequest(e.Message);
+    }
+  }
+
   [HttpDelete("{recipeId}")]
   [Authorize]
 
@@ -69,6 +85,23 @@ public class RecipesController : ControllerBase
     {
       Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
       Recipe recipe = _recipesService.ArchiveRecipe(recipeId, userInfo.Id);
+      return Ok(recipe);
+    }
+    catch (Exception e)
+    {
+      return BadRequest(e.Message);
+    }
+  }
+
+  [HttpPut("{recipeId}")]
+  [Authorize]
+
+  public async Task<ActionResult<Recipe>> UpdateRecipe(int recipeId, [FromBody] Recipe updateData)
+  {
+    try
+    {
+      Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
+      Recipe recipe = _recipesService.UpdateRecipe(updateData, userInfo.Id, recipeId);
       return Ok(recipe);
     }
     catch (Exception e)
