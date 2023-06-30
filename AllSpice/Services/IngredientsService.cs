@@ -3,10 +3,14 @@ namespace AllSpice.Services;
 public class IngredientsService
 {
   private readonly IngredientsRepository _repo;
+
+  private readonly RecipesService _recipesService;
   
-  public IngredientsService(IngredientsRepository repo)
+  public IngredientsService(IngredientsRepository repo, RecipesService recipesService)
   {
     _repo = repo;
+
+    _recipesService = recipesService;
   }
 
   internal Ingredient CreateIngredient(Ingredient ingredientData)
@@ -26,7 +30,8 @@ public class IngredientsService
   internal void DeleteIngredient(int ingredientId, string userId)
   {
     Ingredient ingredient = GetIngredientById(ingredientId);
-    if (ingredient.CreatorId != userId) new Exception("This is not your ingredient to delete!");
+    Recipe recipe = _recipesService.GetRecipeById(ingredient.RecipeId);
+    if (recipe.CreatorId != userId) new Exception("This is not your ingredient to delete!");
     int rows = _repo.DeleteIngredient(ingredientId);
     if (rows > 1) throw new Exception("Something has gone terribly wrong. More than one row affected");
   }

@@ -1,52 +1,70 @@
 namespace AllSpice.Services;
 
-// public class FavoritesService
-// {
-//   private readonly FavoritesRepository _repo;
+public class FavoritesService
+{
+  private readonly FavoritesRepository _repo;
 
-//   public FavoritesService(FavoritesRepository repo)
-//   {
-//     _repo = repo;
-//   }
+  public FavoritesService(FavoritesRepository repo)
+  {
+    _repo = repo;
+  }
 
-//   internal Favorite CreateFavorite(Favorite favoriteData)
-//   {
-//     Favorite favorite = _repo.CreateFavorite(favoriteData);
-//     return favorite;
-//   }
+  // internal void DeleteFavorite(int favoriteId, string userId)
+  // {
+  //   Favorite fav = _repo.GetFavoriteById(favoriteId);
+  //   if (fav.AccountId == userId)
+  //   {
+  //     throw new Exception("Unauthorized to delete");
+  //   }
+  //  int rows =  _repo.DeleteFavorite(favoriteId);
+  //  if (rows > 1) 
+  //  {
+  //    throw new Exception("Something has gone terribly wrong");
+  //  }
+  // }
 
-//   internal List<Favorite> GetAllFavorites()
-//   {
-//     List<Favorite> favorites = _repo.GetAllFavorites();
-//     return favorites;
-//   }
+  internal Favorite CreateFavorite(Favorite favoriteData)
+  {
+    Favorite favorite = _repo.CreateFavorite(favoriteData);
+    return favorite;
+  }
 
-//   internal Favorite GetFavoriteById(int favoriteId)
-//   {
-//     return _repo.GetFavoriteById(favoriteId);
-//   }
+  internal List<FavoritesAccount> GetFavoritesByRecipeId(int recipeId)
+  {
+    return _repo.GetFavoritesByRecipeId(recipeId);
+  }
 
-//   internal List<Favorite> GetFavoritesByAccountId(string accountId)
-//   {
-//     return _repo.GetFavoritesByAccountId(accountId);
-//   }
+  internal List<FavoriteRecipe> GetMyFavoriteRecipes(string accountId)
+  {
+    List<FavoriteRecipe> myFavorites = _repo.GetMyFavoriteRecipes(accountId);
+    return myFavorites;
+  }
 
-//   internal void DeleteFavorite(int favoriteId, string accountId)
-//   {
-//     Favorite favoriteToDelete = GetFavoriteById(favoriteId);
-//     if (favoriteToDelete == null)
-//     {
-//       throw new Exception("Invalid Favorite Id");
-//     }
-//     if (favoriteToDelete.AccountId != accountId)
-//     {
-//       throw new Exception("This is not your favorite");
-//     }
-//     _repo.DeleteFavorite(favoriteId);
-//   }
+  internal void DeleteFavorite(int favoriteId, string userId)
+  {
+    Favorite favoriteToDelete = GetFavoriteById(favoriteId);
+    if (favoriteToDelete == null)
+    {
+      throw new Exception("Invalid Favorite Id");
+    }
+    if (favoriteToDelete.AccountId != userId)
+    {
+      throw new Exception("This is not your favorite");
+    }
+    int rows = _repo.DeleteFavorite(favoriteId);
+    if (rows > 1)
+    {
+      throw new Exception("Something has gone terribly wrong");
+    }
+  }
 
-//   internal List<Recipe> GetRecipesByFavoriteId(int favoriteId)
-//   {
-//     return _repo.GetRecipesByFavoriteId(favoriteId);
-//   }
-// }
+  internal Favorite GetFavoriteById(int favoriteId)
+  {
+    Favorite favorite = _repo.GetFavoriteById(favoriteId);
+    if (favorite == null)
+    {
+      throw new Exception("Invalid Favorite Id");
+    }
+    return favorite;
+  }
+}

@@ -3,12 +3,12 @@ export class Recipe {
     this.id = data.id;
     this.creator = data.creator;
     this.creatorId = data.creatorId;
-    this.title = data.title[0];
+    this.title = data.title;
     this.category = data.category;
     this.rating = data.rating;
     this.image = data.img;
     this.likes = data.likes;
-    this.description = data.description;
+    this.instructions = data.instructions;
     this.servings = data.servings;
     this.prepTime = data.prepTime;
     this.cookTime = data.cookTime;

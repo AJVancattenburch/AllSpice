@@ -30,26 +30,16 @@ public class IngredientsRepository
   {
     string sql = @"
     INSERT INTO ingredients
-      (name, quantity, creatorId, recipeId)
+      (name, quantity, recipeId)
     VALUES
-      (@name, @quantity, @creatorId, @recipeId);
+      (@name, @quantity, @recipeId);
     SELECT
-    ing.*,
-    acc.*
-    FROM ingredients ing
-    JOIN accounts acc
-      ON acc.id = ing.creatorId
-    WHERE ing.id =
       LAST_INSERT_ID()
     ;";
 
-    Ingredient ingredient = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
-    {
-      ingredient.Creator = account;
-      return ingredient;
-    }, ingredientData).FirstOrDefault();
-    return ingredient;
-      
+    int id = _db.ExecuteScalar<int>(sql, ingredientData);
+    ingredientData.Id = id;
+    return ingredientData;
   }
 
   internal int DeleteIngredient(int ingredientId)
@@ -67,19 +57,14 @@ public class IngredientsRepository
   {
     string sql = @"
     SELECT
-    ing.*,
-    acc.*
-    FROM ingredients ing
-    JOIN accounts acc 
-      ON acc.id = ing.creatorId
-    WHERE ing.id = @ingredientId
+    *
+    FROM ingredients
+    WHERE id = @ingredientId
     ;";
-    Ingredient ingredient = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
-    {
-      ingredient.Creator = account;
-      return ingredient;
-    }, new { ingredientId }).FirstOrDefault();
-      return ingredient;
+
+    Ingredient ingredient = _db.Query<Ingredient>(sql, new { ingredientId }).FirstOrDefault();
+    return ingredient;
+    
   }
 
   internal List<Ingredient> GetIngredientsByRecipeId(int recipeId)
@@ -87,17 +72,17 @@ public class IngredientsRepository
     string sql = @"
     SELECT
       ing.*,
-      acc.*
+      rec.*
     FROM ingredients ing
-    JOIN accounts acc 
-      ON acc.id = ing.creatorId
+    JOIN recipes rec
+      ON rec.id = ing.recipeId
     WHERE ing.recipeId = @recipeId
     ;";
-    List<Ingredient> ingredients = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, account) =>
+    List<Ingredient> ingredients = _db.Query<Ingredient, Account, Ingredient>(sql, (ingredient, recipe) =>
     {
-    ingredient.Creator = account;
-    return ingredient;
-  }, new { recipeId }).ToList();
+      ingredient.RecipeId = recipeId;
+      return ingredient;
+    }, new { recipeId }).ToList();
     return ingredients;
   }
 }

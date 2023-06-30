@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS ingredients(
   name VARCHAR(255) NOT NULL COMMENT 'Ingredient Name',
   quantity VARCHAR(255) NOT NULL COMMENT 'Ingredient Quantity',
   recipeId INT NOT NULL COMMENT 'Recipe Id',
-  FOREIGN KEY (recipeId) REFERENCES recipes(id)
+  FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
 
 /* DROP TABLE ingredients; */
@@ -40,20 +40,6 @@ CREATE TABLE IF NOT EXISTS favorites(
   FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
   FOREIGN KEY (accountId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
-
-/* INSERT INTO ingredients
-  (name, quantity, recipeId)
-VALUES
-('Chicken', '1kg', 1),
-('Salt', '1tsp', 1),
-('Pepper', '1tsp', 1),
-('Paprika', '1tsp', 1),
-('Garlic Powder', '1tsp', 1),
-('Onion Powder', '1tsp', 1),
-('Dried Oregano', '1tsp', 1),
-('Dried Thyme', '1tsp', 1),
-('Olive Oil', '2tsp', 1),
-('Parsley', '1tsp', 1); */
 
 INSERT INTO recipes
   (title, instructions, img, category, archived, creatorId)
@@ -108,6 +94,7 @@ JOIN ingredients ing
   ON rec.id = ing.recipeId
 JOIN accounts creator 
   ON rec.creatorId = creator.id;
+WHERE rec.id = '647fe77f07eaa2e6662ac239';
 
 
 -- SECTION FAVORITES
@@ -118,11 +105,8 @@ VALUES
   ('647fe77f07eaa2e6662ac239', LAST_INSERT_ID());
 
 SELECT
-fav.*
-acc.*
-rec.*
-FROM favorites fav
-JOIN accounts acc
-  ON acc.id = fav.accountId
-JOIN recipes rec
-  ON rec.id = fav.recipeId;
+account
+FROM favorites favs
+JOIN accounts account
+  ON account.id = fav.accountId
+WHERE fav.recipeId = 1;

@@ -1,18 +1,59 @@
 <template>
 
-<section class="container-fluid" v-if="recipes"
->
-  <article class="card card-custom">
-		<img :src="recipes.img" class="card-img-top recipe-img" alt="...">
-		<div class="card-body">
-			<h5 class="card-title">{{ recipes.title }}</h5>
-			<p class="card-text">{{ recipes.description }}</p>
-		</div>
-		<div class="card-footer">
-			<small class="text-muted">By {{ recipes.image }}</small>
-			<button class="btn btn-danger btn-sm float-right" @click="deleteRecipe">Delete</button>
-		</div>
-	</article>
+<section class="container-fluid">
+  
+  
+    <div class="card card-custom border-white border-0" style="">
+      <div class="card-custom-img" :style="`background-image: url(${recipe.image})`"></div>
+        <div v-if="recipe.creatorId == account.id">
+          <h5 class="host-badge">CHEF</h5>
+        </div>
+        <div class="card-custom-avatar">
+          <img class="img-fluid object-fit-cover" :src="recipe.creator.picture" :alt="recipe.creator.name" />
+        </div>
+        <!--SECTION * * * CARD BODY * * * ------------->
+        <div class="card-body" style="overflow-y: auto">
+          <h4 class="card-title"> {{ recipe.title }} </h4>
+          <p class="card-text"> {{ recipe.category }} </p>
+          <p  v-if="recipe.instructions.length <= 20" class="card-text"></p>
+          <p class="card-text">{{ recipe.instructions }}</p>
+        </div>
+        <!--SECTION * * * CARD FOOTER * * * -------------------------------------------->
+        <div class="card-footer row" style="background: inherit; border-color: inherit;">
+          <div class="col-12">
+            <p class="card-text">
+              <small class="card-text" style="font-weight: 650;">
+                Last Updated on: {{ 
+                  new Date( recipe.updatedAt )
+                  .toLocaleDateString('en-US', {
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric'
+                  }) }}
+                  @ {{ 
+                    new Date( recipe.updatedAt )
+                    .toLocaleTimeString('en-US', {
+                      hour: 'numeric', 
+                      minute: 'numeric'
+                    }) }}
+              </small>
+            </p>
+          </div>
+          <div class="col-6 ps-4 py-1">
+            <a href="#" class="btn btn-dark" style="color: dodgerblue;">To Top</a>
+          </div>
+          <div class="col-6 ps-5 py-1">
+            <!-- <router-link :to="{ name: 'rDetails', params: { rId: recipe.id } }">
+              <a href="#" aria-label="Go to r Page" class="btn btn-outline-primary">Battle</a>
+            </router-link> -->
+          </div>
+        </div>
+      </div>   
+
+  
+
+
+
 </section>
 
 </template>
@@ -23,29 +64,33 @@ import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { recipesService } from '../services/RecipesService';
 import { Recipe } from "../models/Recipe.js";
+import { AppState } from "../AppState.js";
+import { computed } from "vue";
 
 export default {
 
-	props: 
-  { recipes: 
-    { type: Recipe,
-       required: true
+  props: {
+    recipe: {
+      type: Recipe,
+      required: true
     }
   },
 
-	setup(props) {
+	setup() {
     
 		return {
 
-			async deleteRecipe() {
-				try {
-					await recipesService.deleteRecipe(props.recipes.id)
-					Pop.toast(`You have deleted ${props.recipes.title}`, 'success')
-				} catch (error) {
-					logger.error(error)
-					Pop.toast(error.message, 'error')
-				}
-			},
+      account: computed(() => AppState.account),
+
+			// async deleteRecipe() {
+			// 	try {
+			// 		await recipesService.deleteRecipe(props.recipes.id)
+			// 		Pop.toast(`You have deleted ${props.recipes.title}`, 'success')
+			// 	} catch (error) {
+			// 		loggerecipe.error(error)
+			// 		Pop.toast(errorecipe.message, 'error')
+			// 	}
+			// },
 		}
 	}
 }
@@ -64,7 +109,7 @@ export default {
   color: #efefef;
   text-shadow: 0 1px 5px #998ce2;
   overflow: hidden;
-  min-height: 450px;
+  height: 700px;
   background-color: #0a0b14f3;
   box-shadow: 0 0 15px 2px #0a0a0a4d;
   transition: .5 ease-in-out;
