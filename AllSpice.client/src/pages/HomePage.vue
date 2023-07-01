@@ -1,13 +1,12 @@
 <template>
 
+<section class="container-fluid">
     <div class="row justify-content-center align-items-center">
-        <div class="col-12 col-md-3" v-for="r in recipes" :key="r.id">
+        <div class="col-12 col-md-3 p-5" v-for="r in recipes" :key="r.id">
             <RecipeCard :recipe="r"/>
         </div>
     </div>
- 
-
-
+</section>
 
 </template>
 
@@ -38,6 +37,7 @@ export default {
                 logger.log(error);
             }
         }
+
         async function getRecipeById(recipeId) {
             try {
                 logger.log("[GETTING RECIPE BY ID]");
@@ -48,6 +48,9 @@ export default {
                 logger.log(error);
             }
         }
+
+        
+
         onMounted(() => {
             getAllRecipes();
             getRecipeById();
@@ -61,6 +64,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.container-fluid {
+  background-color: #ffcd8de6;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100%;
+}
 
 .hero-img {
   height: 500px;

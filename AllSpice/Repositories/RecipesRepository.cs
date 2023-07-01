@@ -13,17 +13,17 @@ public class RecipesRepository
   {
     string sql = @"
     INSERT INTO recipes
-    (title, instructions, img, category, archived, creatorId)
+    (title, instructions, img, category, archived, creatorId, createdAt, updatedAt)
     VALUES
-    (@title, @instructions, @img, @category, @archived, @creatorId);
+    (@title, @instructions, @img, @category, @archived, @creatorId, @createdAt, @updatedAt);
 
     SELECT 
       rec.*,
       creator.*
     FROM recipes rec
     JOIN accounts creator ON rec.creatorId = creator.id
-    WHERE rec.id = LAST_INSERT_ID();
-    ";
+    WHERE rec.id = LAST_INSERT_ID()
+    ;";
     
     Recipe recipe = _db.Query<Recipe, Account, Recipe>(sql, (recipe, creator) =>
     {
@@ -40,8 +40,9 @@ public class RecipesRepository
       rec.*,
       creator.*
     FROM recipes rec
-    JOIN accounts creator ON rec.creatorId = creator.id;
-    ";
+    JOIN accounts creator ON rec.creatorId = creator.id
+    ORDER BY createdAt DESC
+    ;";
 
     List<Recipe> recipes = _db.Query<Recipe, Account, Recipe>(sql, (recipe, creator) =>
     {
@@ -79,7 +80,9 @@ public class RecipesRepository
       instructions = @instructions,
       img = @img,
       category = @category,
-      archived = @archived
+      archived = @archived,
+      createdAt = @createdAt,
+      updatedAt = @updatedAt
     WHERE id = @id
     ;";
 

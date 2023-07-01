@@ -86,7 +86,8 @@ public class FavoritesRepository
     JOIN accounts acc
       ON acc.id = rec.creatorId
     WHERE favs.accountId = @accountId
-      ;";
+    ORDER BY rec.createdAt DESC
+    ;";
 
     List<FavoriteRecipe> myFavorites = _db.Query<Favorite, FavoriteRecipe, Account, FavoriteRecipe>(sql, (favorites, recipe, account) =>
     {
