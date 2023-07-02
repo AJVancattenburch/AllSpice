@@ -5,7 +5,9 @@
     <div class="modal-dialog">
       <div class="modal-content">
 
-        <slot></slot>
+        <slot>
+          <!-- FIXME I'M DOING SOMETHING WRONG WHEN TRYING TO SLOT THIS MODAL INTO THE RECIPE AND ACTIVE RECIPE COMPONENTS. WILL FIX LATER TONIGHT OR TOMM AFTER MY BRAIN HAS HAD A BREAK HAHAHA! -->
+        </slot>
 
       </div>
     </div>

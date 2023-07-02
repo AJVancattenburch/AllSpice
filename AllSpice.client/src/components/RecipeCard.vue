@@ -1,4 +1,9 @@
 <template>
+  <!-- FIXME THE MODAL BUTTON ISN'T EVEN SHOWING UP. THIS IS BECAUSE THE MODAL IS NOT BEING CALLED CORRECTLY. TO CALL IT CORRECTLY THE CHANGES THAT NEED TO BE MADE ARE THE FOLLOWING: 
+    MAKE THE MODAL A COMPONENT, THEN IMPORT IT INTO THE RECIPE CARD COMPONENT, THEN CALL THE MODAL COMPONENT IN THE RECIPE CARD COMPONENT. THOUGHT I WAS DOING THIS, BUT I'M MISSING SOMETHING! -->
+  <ActiveRecipeModal id="activeRecipeModal">
+    <ActiveRecipeCard />
+  </ActiveRecipeModal>
 
   <div class="card-hover rounded-3">
     <div class="card-hover__content">
@@ -8,11 +13,12 @@
       <p class="card-hover__text"> {{ recipe.description }} </p>
       <div class="text-center" style="text-shadow: 2px 2px 2px #000000;">
         <a href="#" class="card-hover__link">
-          <span class="flavor-link">Recipe</span>
+          <span @click="getRecipeById(recipeId)" class="flavor-link">Recipe</span>
           <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#281704">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>        
         </a>
+        
       </div>
     </div>
     <div class="card-hover__extra">
@@ -69,8 +75,11 @@ import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { recipesService } from '../services/RecipesService';
 import { Recipe } from "../models/Recipe.js";
+import ActiveRecipeModal from "./ActiveRecipeModal.vue";
+import ActiveRecipeCard from "./ActiveRecipeCard.vue";
 // import { AppState } from "../AppState.js";
-// import { computed } from "vue";
+import { ref, onMounted } from "vue";
+import { Modal } from "bootstrap";
 // import { Account } from "../models/Account.js";
 
 export default {
@@ -82,9 +91,23 @@ export default {
     }
   },
 
+  components: {
+    ActiveRecipeModal,
+    ActiveRecipeCard
+  },
+
 	setup() {
+
+    const modalElement = ref(null)
+    const modal = ref(null)
+
+    onMounted(() => {
+      modal.value = new Modal(modalElement.value)
+    })
     
 		return {
+      modalElement,
+      modal,
 
       getRecipeById(recipeId) {
         try {
@@ -150,6 +173,10 @@ body {
   height: 100%;
   color: #1F1D42;
   background-color: #F0F8E1;
+}
+
+.card-hover__content {
+  padding-top: 10px !important;
 }
 
 .card-hover {
