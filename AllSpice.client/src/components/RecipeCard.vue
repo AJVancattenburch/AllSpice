@@ -1,4 +1,3 @@
--- Active: 1687988623701@@SG-sandbox-58742.servers.mongodirector.com@3306@sandbox
 <template>
 
   <div class="card-hover rounded-3">
@@ -9,15 +8,15 @@
       <p class="card-hover__text"> {{ recipe.description }} </p>
       <div class="text-center" style="text-shadow: 2px 2px 2px #000000;">
         <a href="#" class="card-hover__link">
-          <span class="ps-3 flavor-link">Flavorites</span>
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#7f4b0b">
+          <span class="flavor-link">Recipe</span>
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#281704">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>        
         </a>
       </div>
     </div>
     <div class="card-hover__extra">
-      <h5 class="mt-4">Add <span class="mx-1"> {{ recipe.title }} </span> to your</h5>
+      <h5 class="mt-4"><span>Craving </span> {{ recipe.title }} <span> today?</span> </h5>
     </div>
     <img :src="recipe.image" :alt="recipe.title">
   </div>
@@ -155,7 +154,7 @@ body {
 
 .card-hover {
   $root: &;
-  width: 300px;
+  width: 350px;
   height: 400px;
   position: relative;
   overflow: hidden;
@@ -289,27 +288,27 @@ body {
     justify-content: center;
     flex-direction: column;
     width: 100%;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     text-align: center;
     background-color: #fffdcb9b;
     padding: 80px;
     bottom: 0;
-    color: #ffc088;
-    text-shadow: 2px 2px 2px #000000;
+    color: #462a2a;
+    text-shadow: 2px 2px 3px #ffffff;
     transform: translateY(100%);
     will-change: transform;
     transition: transform 0.35s;
     z-index: 1;
 
     span {
-      color: #7f4b0b;
-      text-shadow: 2px 2px 2px #ffe241;
+      color: #482a06;
+      text-shadow: 2px 2px 2px #b39f2e;
     }
   }
 
   .flavor-link:hover {
-    color: #7f4b0b !important;
-    text-shadow: 2px 2px 2px #ffe241 !important;
+    color: #281704 !important;
+    text-shadow: 2px 2px 3px #b39f2e !important;
     transition: all 0.35s;
   }
 
@@ -323,7 +322,7 @@ body {
     object-position: center;
     transform: scale(1.2);
     transition: 0.35s 0.35s transform cubic-bezier(.1,.72,.4,.97);
-    opacity: .7;
+    opacity: .9;
   }
 }
 /**.recipe-img {

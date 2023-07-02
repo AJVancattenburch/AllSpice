@@ -1,11 +1,20 @@
 <template>
 
 <section class="container-fluid">
-    <div class="row justify-content-center align-items-center">
-        <div class="col-12 col-md-3 p-5" v-for="r in recipes" :key="r.id">
-            <RecipeCard :recipe="r"/>
-        </div>
+
+  <section class="bg-panImg">
+    <div class="row">
+      <div class="col-12 px-0">
+        <!-- <img src="" alt="hero-image"> -->
+      </div>
+      </div>
+  </section>
+
+  <div class="row justify-content-center align-items-center">
+    <div class="col-12 col-md-4 p-5" v-for="r in recipes" :key="r.id">
+      <RecipeCard :recipe="r"/>
     </div>
+  </div>
 </section>
 
 </template>
@@ -75,10 +84,35 @@ export default {
 }
 
 .hero-img {
-  height: 500px;
+  background-image: url(https://reymannfoundation.org/wp-content/uploads/2020/01/recipe-hero-compressor.jpg);
+  height: 100%;
   width: 100%;
   object-fit: cover;
-  object-position: center;
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+.bg-panImg {
+  
+  animation: panImg 10s ease-in-out infinite;
+}
+
+@keyframes panImg {
+  0%, 100% {
+    background-position: left top;
+  }
+
+  25% {
+    background-position: right bottom;
+  }
+
+  50% {
+    background-position: left bottom;
+  }
+
+  75% {
+    background-position: right top;
+  }   
 }
 
 </style>

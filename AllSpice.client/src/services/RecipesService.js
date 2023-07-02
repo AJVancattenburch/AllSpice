@@ -2,7 +2,6 @@ import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 import { Recipe } from '../models/Recipe'
-import { Offcanvas } from "bootstrap"
 import Pop from "../utils/Pop.js"
 
 class RecipesService {
