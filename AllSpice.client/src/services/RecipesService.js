@@ -2,7 +2,8 @@ import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 import { Recipe } from '../models/Recipe'
-
+import { Offcanvas } from "bootstrap"
+import Pop from "../utils/Pop.js"
 
 class RecipesService {
 
@@ -13,8 +14,16 @@ class RecipesService {
     logger.log(AppState.recipes)
   }
 
-  async getRecipeById(recipeId) {
-    const res = await this.getAllRecipes
+  getRecipeById(recipeId) {
+    AppState.activeRecipe = AppState.recipes.find(r => r.id == recipeId)
+  }
+
+  async createRecipe(recipeData) {
+    logger.log('[GRABBING POST DATA => CREATE RECIPE]', recipeData)
+    const res = await api.post('api/recipes', recipeData)
+    logger.log(res.data, `${recipeData}`)
+    Pop.success(`${res.data.name} has been created!`)
+    return res.data
   }
 
   async deleteRecipe(recipeId) {

@@ -1,3 +1,4 @@
+-- Active: 1687988623701@@SG-sandbox-58742.servers.mongodirector.com@3306@sandbox
 <template>
 
   <div class="card-hover rounded-3">
@@ -69,9 +70,9 @@ import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { recipesService } from '../services/RecipesService';
 import { Recipe } from "../models/Recipe.js";
-import { AppState } from "../AppState.js";
-import { computed } from "vue";
-import { Account } from "../models/Account.js";
+// import { AppState } from "../AppState.js";
+// import { computed } from "vue";
+// import { Account } from "../models/Account.js";
 
 export default {
 
@@ -85,6 +86,16 @@ export default {
 	setup() {
     
 		return {
+
+      getRecipeById(recipeId) {
+        try {
+          logger.log('[GETTING RECIPE BY ID]')
+          recipesService.getRecipeById(recipeId)
+        } catch (error) {
+          Pop.error(error.message)
+          logger.log(error)
+        }
+      }
 
       
 			// async deleteRecipe() {

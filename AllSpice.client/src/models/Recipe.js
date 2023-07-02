@@ -7,17 +7,13 @@ export class Recipe {
     this.category = data.category;
     this.rating = data.rating;
     this.image = data.img;
-    this.likes = data.likes;
     this.instructions = data.instructions;
     this.servings = data.servings;
     this.prepTime = data.prepTime;
     this.cookTime = data.cookTime;
     this.totalTime = data.totalTime;
-    this.ingredients = data.ingredients;
-    this.steps = data.steps;
-    this.comments = data.comments;
     this.archived = data.archived;
-    this.createdBy = data.createdBy;
+    this.createdBy = data.creator.name;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }
