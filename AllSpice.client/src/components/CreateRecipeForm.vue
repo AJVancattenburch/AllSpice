@@ -140,16 +140,16 @@ export default {
         try {
           logger.log(editable.value)
           const recipeData = editable.value
-          const newRecipe = recipesService.createRecipe(recipeData)
+          await recipesService.createRecipe(recipeData)
           Offcanvas.getOrCreateInstance('#offcanvasWithBothOptions').hide()
-          router.push(
-            { name:
-              'RecipeDetails',
-              params: {
-                recipeId: newRecipe.id
-              }
-            }
-          )
+          // router.push(
+          //   { name:
+          //     'RecipeDetails',
+          //     params: {
+          //       recipeId: newRecipe.id
+          //     }
+          //   }
+          // )
         } catch (error) {
           logger.error(error)
           Pop.toast(error, `Failed to create ${editable.value.title}}`)
