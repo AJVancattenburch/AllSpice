@@ -9,16 +9,16 @@ export class Favorite {
   }
 }
 
-export class MyFavorites extends Recipe {
-  constructor(data) {
-    super(data)
-    this.favoriteId = data.favoriteId
-  }
-}
+// export class MyFavorites extends Recipe {
+//   constructor(data) {
+//     super(data)
+//     this.favoriteId = data.favoriteId
+//   }
+// }
 
-export class FavoritesProfile extends Profile {
-  constructor(data) {
-    super(data)
-    this.favoriteId = data.favoriteId
-  }
-}
+// export class FavoritesProfile extends Profile {
+//   constructor(data) {
+//     super(data)
+//     this.favoriteId = data.favoriteId
+//   }
+// }

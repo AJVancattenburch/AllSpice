@@ -1,7 +1,6 @@
 <template>
   
-  <button class="col-1 text-center pt-3 pb-3">
-    <span class="w-100 fs-6">Click me</span>
+  <button v-if="recipe" @click="getRecipeById(recipe.id)" class="offcanvas-button" style="position: absolute; top: 5.5rem; right: 2rem;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><span class="w-100 fs-6">Create Recipe</span>
     <svg width="79" height="46" viewBox="0 0 79 46" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_f_618_1123)">
       <path d="M42.9 2H76.5L34.5 44H2L42.9 2Z" fill="url(#paint0_linear_618_1123)"/>
@@ -18,9 +17,42 @@
       </linearGradient>
     </defs>
   </svg>
-  </button>
+</button>
 
 </template>
+
+<script>
+
+import { computed } from 'vue'
+import { AppState } from '../AppState'
+import { logger } from '../utils/Logger'
+import { recipesService } from '../services/RecipesService'
+import Pop from '../utils/Pop'
+
+export default {
+  
+  setup() {
+
+    return {
+
+      account: computed(() => AppState.account),
+      recipe: computed(() => AppState.activeRecipe),
+
+      getRecipeById(recipeId) {
+        try {
+          logger.log('[GETTING RECIPE BY ID]')
+          recipesService.getRecipeById(recipeId)
+        } catch (error) {
+          Pop.error(error.message)
+          logger.log(error)
+        }
+      }
+
+    }
+  }
+}
+
+</script>
 
 <style scoped lang="scss">
 

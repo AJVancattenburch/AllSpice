@@ -2,29 +2,33 @@
   <!-- FIXME THE MODAL BUTTON ISN'T EVEN SHOWING UP. THIS IS BECAUSE THE MODAL IS NOT BEING CALLED CORRECTLY. TO CALL IT CORRECTLY THE CHANGES THAT NEED TO BE MADE ARE THE FOLLOWING: 
     MAKE THE MODAL A COMPONENT, THEN IMPORT IT INTO THE RECIPE CARD COMPONENT, THEN CALL THE MODAL COMPONENT IN THE RECIPE CARD COMPONENT. THOUGHT I WAS DOING THIS, BUT I'M MISSING SOMETHING! -->
 
-
-  <div class="card-hover rounded-3">
-    <div class="card-hover__content">
-      <h3 class="card-hover__title">
-        Flavor Alert! <span> {{ recipe.title }} </span> is trending!
-      </h3>
-      <p class="card-hover__text"> {{ recipe.description }} </p>
-      <div class="text-center" style="text-shadow: 2px 2px 2px #000000;">
-        <a href="#" class="card-hover__link">
-          <span @click="getRecipeById(recipe.id)" class="flavor-link">Recipe</span>
-          <RecipeDetailsModal />
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#281704">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>        
-        </a>
-        
+    <div v-if="recipe" class="card-hover rounded-3">
+      <div class="card-hover__content">
+        <h3 class="card-hover__title">
+          Flavor Alert! <span> {{ recipe.title }} </span> is trending!
+        </h3>
+        <p class="card-hover__text"> {{ recipe.description }} </p>
+        <div class="text-center" style="text-shadow: 2px 2px 2px #000000;">
+          <div class="card-hover__link">
+            <!-- STUB OFFCANVAS BUTTON FOR RECIPE DETAILS -->
+            <span @click="getRecipeById(recipe.id)" class="flavor-link offcanvas-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Recipe Details</span>
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#281704">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>        
+          </div>
       </div>
     </div>
     <div class="card-hover__extra">
       <h5 class="mt-4"><span>Craving </span> {{ recipe.title }} <span> today?</span> </h5>
     </div>
     <img :src="recipe.image" :alt="recipe.title">
+    <div v-if="recipe.creatorId == account.id" style="position: absolute; bottom: 0; right: 0;">
+      <i @click="deleteRecipe()" class="mdi mdi-trash-can delete-recipe fs-1" style="color: white;"></i>
+    </div>
   </div>
+  <OffCanvas id="offcanvasWithBothOptions" class="offcanvas offcanvas-xxl offcanvas-top">
+    <RecipeDetailsCard />
+  </OffCanvas>
 
   <!-- <div class="card-custom-chef">
     <p>{{ recipe.category }}</p>
@@ -74,12 +78,13 @@ import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { recipesService } from '../services/RecipesService';
 import { Recipe } from "../models/Recipe.js";
-// import { AppState } from "../AppState.js";
-import { onMounted } from "vue";
+import { AppState } from "../AppState.js";
+import { onMounted, computed } from "vue";
 // import { Modal } from "bootstrap";
-import RecipeDetailsModal from "./RecipeDetailsModal.vue";
-// import ActiveRecipeCard from "./ActiveRecipeCard.vue";
 // import { Account } from "../models/Account.js";
+import RecipeDetailsCard from "../components/RecipeDetailsCard.vue";
+import OffCanvas from '../components/Offcanvas.vue';
+// import { Offcanvas } from "bootstrap";
 
 export default {
 
@@ -91,10 +96,11 @@ export default {
   },
 
   components: {
-    RecipeDetailsModal
+    RecipeDetailsCard, 
+    OffCanvas
   },
 
-	setup() {
+	setup(props) {
 
     // const modalElement = ref(null)
     // const modal = ref(null)
@@ -106,27 +112,31 @@ export default {
 		return {
       // modalElement,
       // modal,
+      account: computed(() => AppState.account),
 
       getRecipeById(recipeId) {
         try {
           logger.log('[GETTING RECIPE BY ID]')
           recipesService.getRecipeById(recipeId)
+          // Offcanvas.getOrCreateInstance('#offcanvasWithBothOptions').hide()
         } catch (error) {
           Pop.error(error.message)
           logger.log(error)
         }
-      }
+      },
 
       
-			// async deleteRecipe() {
-			// 	try {
-			// 		await recipesService.deleteRecipe(props.recipes.id)
-			// 		Pop.toast(`You have deleted ${props.recipes.title}`, 'success')
-			// 	} catch (error) {
-			// 		loggerecipe.error(error)
-			// 		Pop.toast(errorecipe.message, 'error')
-			// 	}
-			// },
+			async deleteRecipe() {
+				try {
+					if (await Pop.confirm(`Are you sure you want to delete ${props.recipe.title}?`)) {
+             recipesService.deleteRecipe(props.recipe.id)
+          }
+					Pop.toast(`Did not delete ${props.recipe.title}`, 'success')
+				} catch (error) {
+					logger.error(error)
+					Pop.toast(error.message, 'error')
+				}
+			},
 		}
 	}
 }
@@ -171,6 +181,17 @@ body {
   height: 100%;
   color: #1F1D42;
   background-color: #F0F8E1;
+}
+
+.offcanvas-xxl {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 75% !important;
+  right: 0 !important;
+  left: 0 !important;
+  margin: auto !important;
 }
 
 .card-hover__content {
@@ -347,99 +368,12 @@ body {
     object-position: center;
     transform: scale(1.2);
     transition: 0.35s 0.35s transform cubic-bezier(.1,.72,.4,.97);
-    opacity: .9;
+    opacity: 1;
   }
 }
-/**.recipe-img {
-  aspect-ratio: 1/.5;
-  box-shadow: 0 0 15px 15px #000000;
-  filter: drop-shadow(0 0 15px 15px #000000);
+
+i.delete-recipe {
+  transform: translateX(30px) !important;
 }
 
-.card-custom {
-  color: #efefef;
-  text-shadow: 0 1px 5px #998ce2;
-  overflow: hidden;
-  height: 400px;
-  background-color: #ff000035;
-  box-shadow: 0 0 15px 2px #0a0a0a4d;
-  transition: .5 ease-in-out;
-
-}
-
-.card-custom-img {
-  height: 200px;
-  min-height: 200px;
-  background-color: #00000090;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  opacity: .8;
-  filter: brightness(1.3);
-  box-shadow: 0 10px 0 10px #0a0a0a4d;
-  border-color: inherit;
-}
-
-<!-- First border-left-width setting is a fallback -->
-.card-custom-img::after {
-  position: absolute;
-  content: '';
-  top: 160px;
-  left: -10px;
-  transform: rotate-X(180deg);
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-top-width: 40px;
-  border-right-width: 0;
-  border-bottom-width: 0;
-  border-left-width: 545px;
-  border-right-width: 545px;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  border-left-color: #0b0d12ef;
-}
-
-.card-custom-chef p {
-  background-color: #ffaa64d4;
-  border-radius: 5%;
-  box-shadow: 0 0 15px 3px #0a0a0a9a;
-  position: relative;
-  top: 55px;
-  left: 5.25rem;
-  text-align: center;
-  width: 110px;
-  height: 33px;
-}
-
-.card-custom:hover {
-  transform: scale(1.01);
-  filter: brightness(1.1);
-  transition: .5s ease-in-out;
-}
-
-::-webkit-scrollbar {
-  background-color: #2d288cc6;
-  width: .85rem;
-  border-radius: 0.25rem;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #8b8b8b5f;
-  border-radius: 0.25rem;
-}
-
-::-webkit-scrollbar-track {
-  background-color: rgba(32, 20, 12, 0.512);
-  border-radius: 0.25rem;
-  border-style: ridge;
-}
-
-::-webkit-scrollbar-corner {
-  background-color: #2d288c;
-  border-radius: 0.5rem;
-  border-style: groove;
-}
- */
 </style>

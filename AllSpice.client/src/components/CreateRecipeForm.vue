@@ -1,6 +1,6 @@
 <template>
 
-  <button class="offcanvas-button" style="position: absolute; top: 5.5rem; right: 2rem;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><span class="w-100 fs-6">Create Recipe</span>
+  <!-- <button class="offcanvas-button" style="position: absolute; top: 5.5rem; right: 2rem;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><span class="w-100 fs-6">Create Recipe</span>
       <svg width="79" height="46" viewBox="0 0 79 46" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_f_618_1123)">
         <path d="M42.9 2H76.5L34.5 44H2L42.9 2Z" fill="url(#paint0_linear_618_1123)"/>
@@ -24,11 +24,11 @@
     <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"></h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
-  <div>
+  <div> -->
     
     <form class="form__contact" @submit.prevent="createRecipe()">
       <fieldset>
-        <div class="offcanvas-body row justify-content-center align-items-center pt-5">
+      <div class="offcanvas-body row justify-content-center align-items-center pt-5">
           <p class="canvas-header pt-5">Create a New FlavorIt Recipe!</p>
           <div class="col-10">
             <label for="category" class="mt-5">Select a Category</label>
@@ -64,11 +64,11 @@
             <input type="text" id="instructions" name="instructions" class="form-control" required minlength="3"
               maxlength="5000" v-model="editable.instructions">
           </div>
+          <button type="submit" class="button close-button fs-1" tabindex="4">Create Recipe &#187;</button>
         </div>
-        <button type="submit" class="button close-button fs-1" tabindex="4">Create Recipe &#187;</button>
       </fieldset>
-    </form>
-    //
+      </form>
+    
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
       <defs>
         <filter id="blur0">
@@ -89,8 +89,7 @@
       </defs>
     </svg>
 
-  </div>
-</div>
+
 
 
 
@@ -116,7 +115,7 @@ import Pop from '../utils/Pop'
 import { recipesService } from '../services/RecipesService'
 import { AppState } from '../AppState'
 import { Offcanvas } from "bootstrap"
-import { router } from "../router.js"
+// import { router } from "../router.js"
 
 export default {
   

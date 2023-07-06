@@ -1,7 +1,10 @@
 <template>
 
   <section class="container-fluid">
+    <CreateRecipeButton />
+    <OffCanvas id="offcanvasWithBothOptions">
       <CreateRecipeForm />
+    </OffCanvas>
   </section>
 </template>
 
@@ -10,13 +13,16 @@ import { computed } from 'vue';
 import { AppState } from '../AppState';
 import { recipesService } from '../services/RecipesService';
 import { logger } from '../utils/Logger';
-// import CreateRecipeButton from '../components/CreateRecipeButton.vue';
+import CreateRecipeButton from '../components/CreateRecipeButton.vue';
 import CreateRecipeForm from '../components/CreateRecipeForm.vue';
+import OffCanvas from '../components/Offcanvas.vue';
 
 export default {
 
   components: {
     CreateRecipeForm, 
+    OffCanvas,
+    CreateRecipeButton
   },
 
   setup() {

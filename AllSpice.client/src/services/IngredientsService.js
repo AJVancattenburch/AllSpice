@@ -14,6 +14,7 @@ class IngredientsService {
 
   async getIngredientByRecipeId(recipeId) {
     const res = await api.get(`api/recipes/${recipeId}/ingredients`)
+    logger.log('[INGREDIENTS BY RECIPE ID]', res.data)
     AppState.ingredients = res.data.map(i => new Ingredient(i))
   }
 

@@ -3,6 +3,7 @@ import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 import { Recipe } from '../models/Recipe'
 import Pop from "../utils/Pop.js"
+import { Modal } from "bootstrap"
 
 class RecipesService {
 
@@ -29,6 +30,7 @@ class RecipesService {
   async deleteRecipe(recipeId) {
     await api.delete(`api/recipes/${recipeId}`)
     AppState.recipes = AppState.recipes.filter(r => r.id !== recipeId)
+    Pop.toast('Recipe Deleted!', 'success')
   }
 
 
