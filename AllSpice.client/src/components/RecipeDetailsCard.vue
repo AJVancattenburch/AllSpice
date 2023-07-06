@@ -22,6 +22,13 @@
 
             </div> -->
             <p class="card-text">{{ recipe.instructions }}</p>
+
+            <div v-for="i in ingredient" :key="i?.id">
+              <div class="bg-dark text-light">
+                <p> {{ i.name }} </p>
+                <p> {{ i.quantity }} </p>
+              </div>
+            </div>
           </div>
           <!-- SECTION * * * CARD FOOTER * * * ---------------------------------------------->
           <div class="card-footer row" style="background: inherit; border-color: inherit;">
@@ -54,25 +61,43 @@
 
 <script>
 
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { AppState } from '../AppState'
-// import Pop from "../utils/Pop"
-// import { logger } from '../utils/Logger'
+import Pop from "../utils/Pop"
+import { logger } from '../utils/Logger'
 // import { recipesService } from '../services/RecipesService.js'
+import { ingredientsService } from '../services/IngredientsService.js'
 // import { useRoute } from "vue-router"
 
 export default {
   
   setup() {
 
+    // async function getIngredientsByRecipeId(recipeId) {
+    //   try {
+    //     await ingredientsService.getIngredientsByRecipeId(recipeId)
+    //   } catch (error) {
+    //     logger.log(error)
+    //     Pop.error(error.message)
+    //   }
+    // }
+
+    // watchEffect(() => {
+    //   if (AppState.activeRecipe) {
+    //     AppState.ingredients = []
+    //     getIngredientsByRecipeId(AppState.activeRecipe.id)
+    //   }
+    // })
     
     return {
 
       account: computed(() => AppState.account),
       recipe: computed(() => AppState.activeRecipe),
+      ingredient: computed(() => AppState.ingredients),
+
+      }
 
 
-    }
   }
 }
 

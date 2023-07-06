@@ -16,59 +16,25 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>        
           </div>
-      </div>
-    </div>
-    <div class="card-hover__extra">
-      <h5 class="mt-4"><span>Craving </span> {{ recipe.title }} <span> today?</span> </h5>
-    </div>
-    <img :src="recipe.image" :alt="recipe.title">
-    <div v-if="recipe.creatorId == account.id" style="position: absolute; bottom: 0; right: 0;">
-      <i @click="deleteRecipe()" class="mdi mdi-trash-can delete-recipe fs-1" style="color: white;"></i>
-    </div>
-  </div>
-  <OffCanvas id="offcanvasWithBothOptions" class="offcanvas offcanvas-xxl offcanvas-top">
-    <RecipeDetailsCard />
-  </OffCanvas>
-
-  <!-- <div class="card-custom-chef">
-    <p>{{ recipe.category }}</p>
-  </div>
-    <div class="card card-custom border-white border-0 my-5" style="">
-      <div class="card-custom-img m-2" :style="`background-image: url(${recipe.image})`">
-        <div style="background-color: #00000095; box-shadow: 0 5px 3px 3px #00000095;">
-          <h6 class="card-title text-center"> {{ recipe.title }} </h6>
         </div>
       </div>
-        // SECTION * * * CARD BODY * * * ---------------
-        <div class="card-body" style="overflow-y: auto">
-          
-          <p class="card-text"> {{ recipe.category }} </p>
-          <p  v-if="recipe.instructions.length <= 20" class="card-text"></p>
-          <p class="card-text">{{ recipe.instructions }}</p>
-        </div>
-        // SECTION * * * CARD FOOTER * * * ----------------------------------------------
-        <div class="card-footer row" style="background: inherit; border-color: inherit;">
-          <div class="col-12">
-            <p class="card-text">
-              <small class="card-text" style="font-weight: 650;">
-                Last Updated on: {{ 
-                  new Date( recipe.createdAt )
-                  .toLocaleDateString('en-US', {
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric'
-                  }) }}
-                  @ {{ 
-                    new Date( recipe.createdAt )
-                    .toLocaleTimeString('en-US', {
-                      hour: 'numeric', 
-                      minute: 'numeric'
-                    }) }}
-              </small>
-            </p>
+      <div v-if="recipe.creatorId == account.id">
+        <div class="row">
+          <div class="col-12 d-flex justify-content-end align-items-center ">
+            <i @click="deleteRecipe()" class="mdi mdi-trash-can delete-recipe fs-1" style="color: white; z-index: 1;">
+            </i>
           </div>
         </div>
-      </div>    -->
+      </div>
+      <div class="card-hover__extra">
+        
+        <h5 class="mt-4"><span>Craving </span> {{ recipe.title }} <span> today?</span> </h5>
+      </div>
+      <img :src="recipe.image" :alt="recipe.title">
+    </div>
+    <OffCanvas id="offcanvasWithBothOptions" class="offcanvas offcanvas-xxl offcanvas-top">
+      <RecipeDetailsCard />
+    </OffCanvas>
 
 </template>
 
@@ -372,8 +338,89 @@ body {
   }
 }
 
-i.delete-recipe {
-  transform: translateX(30px) !important;
+.delete-recipe {
+  position: absolute;
+  bottom: .5rem;
+  right: .5rem;
+  text-shadow: 2px 2px 2px black;
+  transition: all 0.35s;
 }
+
+.delete-recipe:hover {
+  position: absolute;
+  bottom: .5rem;
+  right: .5rem;
+  text-shadow: 1px 1px 3px black;
+  animation: shake 0.5s ease-in-out forwards;
+  transition: all 0.35s;
+}
+
+@keyframes shake {
+  0% { 
+    transform: translate(1px, 1px) rotate(0deg); 
+  }
+  10% { 
+    transform: translate(-1px, -2px) rotate(-1deg); 
+    color: #ffa600;
+  }
+  20% { 
+    transform: translate(-3px, 0px) rotate(1deg); 
+    color: #ff7400;
+  }
+  30% { 
+    transform: translate(3px, 2px) rotate(0deg); 
+    color: #ff4d00;
+  }
+  40% { 
+    transform: translate(1px, -1px) rotate(1deg); 
+    color: #ff1a00;
+  }
+  50% { 
+    transform: translate(-1px, 2px) rotate(-1deg); 
+    color: #ff0000;
+  }
+  60% { 
+    transform: translate(-3px, 1px) rotate(0deg); 
+    color: #ff1a00;
+  }
+  70% { 
+    transform: translate(3px, 1px) rotate(-1deg); 
+    color: #ff4d00;
+
+  }
+  80% { 
+    transform: translate(-1px, -1px) rotate(1deg); 
+    color: #ff7400;
+  }
+  90% { 
+    transform: translate(1px, 2px) rotate(0deg); 
+    color: #ffa400;
+  }
+  100% { 
+    transform: translate(1px, -2px) rotate(-1deg);
+    color: #ffa600;
+  }
+}
+
+/* .tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+} */
 
 </style>

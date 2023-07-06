@@ -12,15 +12,22 @@ class IngredientsService {
   //   logger.log(AppState.ingredients)
   // }
 
-  async getIngredientByRecipeId(recipeId) {
+  async getIngredientsByRecipeId(recipeId) {
     const res = await api.get(`api/recipes/${recipeId}/ingredients`)
-    logger.log('[INGREDIENTS BY RECIPE ID]', res.data)
     AppState.ingredients = res.data.map(i => new Ingredient(i))
+    logger.log('[INGREDIENTS BY RECIPE ID]', res.data)
   }
 
   async addIngredientToRecipe(ingredientData) {
     const res = await api.post('api/ingredients', ingredientData)
-    AppState.ingredients.push(new Ingredient(res.data))
+    AppState.activeRecipe.ingredients.push(new Ingredient(res.data))
+    // AppState.ingredients.push(new Ingredient(res.data))
+  }
+
+  async editIngredient(ingredientData) {
+    const res = await api.put(`api/ingredients/${ingredientData.id}`, ingredientData)
+    AppState.ingredients = res.data.map(i => new Ingredient(i))
+    logger.log('[EDIT INGREDIENT]', res.data)
   }
 }
 
