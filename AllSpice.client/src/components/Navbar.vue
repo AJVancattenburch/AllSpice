@@ -1,6 +1,6 @@
 <template>
 
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <nav class="navbar navbar-expand-lg bg-body-dark" style="opacity: .9;">
     <div class="container-fluid">
       <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
         <div class="d-flex flex-column align-items-center">
@@ -85,31 +85,20 @@ export default {
 
       async searchRecipes() {
         try {
-          const query = editable.value
-          await recipesService.searchRecipes(query)
-          editable.value = ''
+          const searchTerm = editable.value
+            .split(' ')
+            .join('+')
+          logger.log("[SEARCH TERM] =>",searchTerm)
+          AppState.query = searchTerm
+          await recipesService.searchRecipes(searchTerm)
+          // router.push(
+          //   { name: 'Search' , params: { query: searchString }}
+          // )
         } catch (error) {
-          logger.log(error)
-          Pop.error(error.message)
+          logger.error(error)
+          Pop.toast(error.message, 'error')
         }
       }
-
-      // async searchRecipes() {
-      //   try {
-      //     const searchTerm = editable.value
-      //       .split(' ')
-      //       .join('+')
-      //     logger.log("[SEARCH TERM] =>",searchTerm)
-      //     AppState.query = searchTerm
-      //     await recipesService.searchRecipes(searchTerm)
-      //     // router.push(
-      //     //   { name: 'Search' , params: { query: searchString }}
-      //     // )
-      //   } catch (error) {
-      //     logger.error(error)
-      //     Pop.toast(error.message, 'error')
-      //   }
-      // }
 
     }
   },

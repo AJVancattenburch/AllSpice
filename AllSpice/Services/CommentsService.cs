@@ -14,10 +14,10 @@ public class CommentsService
     Comment comment = GetCommentById(commentId);
     if (comment.AccountId != userId)
     {
-      throw new Exception("You are not permitted to delete another user's comment.");
+      throw new Exception("[ERROR: UNAUTHORIZED].");
     }
     _repo.DeleteComment(commentId);
-    return $"The comment at Id: {commentId} has been deleted.";
+    return $"[COMMENT ID]  => {commentId} has been deleted.";
   }
 
   internal Comment GetCommentById(int commentId)
