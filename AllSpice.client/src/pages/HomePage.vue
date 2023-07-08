@@ -37,8 +37,8 @@
   </section>
 
   <div class="row justify-content-center align-items-center">
-    <div class="col-12 col-md-4 p-5" v-for="r in recipes" :key="r.id">
-      <RecipeCard :recipe="r"/>
+    <div class="col-12 col-md-4 p-5" v-for="(recipe, each) in recipes" :key="each.id">
+      <RecipeCard :recipe="recipe"/>
     </div>
   </div>
 </section>
@@ -95,7 +95,6 @@ export default {
 
         onMounted(() => {
             getAllRecipes();
-            // getRecipeById();
         });
 
         return {

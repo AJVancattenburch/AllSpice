@@ -1,6 +1,4 @@
 <template>
-  <!-- FIXME THE MODAL BUTTON ISN'T EVEN SHOWING UP. THIS IS BECAUSE THE MODAL IS NOT BEING CALLED CORRECTLY. TO CALL IT CORRECTLY THE CHANGES THAT NEED TO BE MADE ARE THE FOLLOWING: 
-    MAKE THE MODAL A COMPONENT, THEN IMPORT IT INTO THE RECIPE CARD COMPONENT, THEN CALL THE MODAL COMPONENT IN THE RECIPE CARD COMPONENT. THOUGHT I WAS DOING THIS, BUT I'M MISSING SOMETHING! -->
 
     <div v-if="recipe" class="card-hover rounded-3">
       <div class="card-hover__content">
@@ -10,7 +8,8 @@
         <p class="card-hover__text"> {{ recipe.description }} </p>
         <div class="text-center" style="text-shadow: 2px 2px 2px #000000;">
           <div class="card-hover__link">
-            <!-- STUB OFFCANVAS BUTTON FOR RECIPE DETAILS -->
+
+            <!-- NOTE - OFFCANVAS BUTTON FOR RECIPE DETAILS CARD (OPENS THE OFFCANVAS ON LINE 34) ------------------------------>
             <span @click="getRecipeById(recipe.id)" class="flavor-link offcanvas-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Recipe Details</span>
             <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#281704">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -18,6 +17,20 @@
           </div>
         </div>
       </div>
+
+      <!-- NOTE - ICON TO ADD/REMOVE A FAVORITE RECIPE TO/FROM USERS COOKBOOK -->
+      <div v-if="isFlavorIt(recipe.id)" class="row">
+        <div class="col-12 d-flex justify-content-start align-items-center">
+          <i @click="removeFlavorIt(recipe.id)" class="mdi mdi-heart selectable fs-1" style="color: red; z-index: 2;"></i>
+        </div>
+      </div>
+      <div v-else class="row">
+        <div class="col-12 d-flex justify-content-start align-items-center">
+          <i @click="addFlavorIt(recipe.id)" class="mdi mdi-heart-outline selectable fs-1" style="color: white; z-index: 2;"></i>
+        </div>
+      </div>
+
+      <!-- NOTE = ICON TO DELETE RECIPE IF YOU CREATED IT -->
       <div v-if="recipe.creatorId == account.id">
         <div class="row">
           <div class="col-12 d-flex justify-content-end align-items-center ">
@@ -27,11 +40,12 @@
         </div>
       </div>
       <div class="card-hover__extra">
-        
         <h5 class="mt-4"><span>Craving </span> {{ recipe.title }} <span> today?</span> </h5>
       </div>
       <img :src="recipe.image" :alt="recipe.title">
     </div>
+
+    <!-- NOTE - OPENS RECIPE DETAILS CARD VIA OFFCANVAS (BUTTON TO OPEN OFFCANVAS LOCATED ON LINE 13) -->
     <OffCanvas id="offcanvasWithBothOptions" class="offcanvas offcanvas-xxl offcanvas-top">
       <RecipeDetailsCard />
     </OffCanvas>
@@ -43,14 +57,12 @@
 import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { recipesService } from '../services/RecipesService';
+import { favoritesService } from '../services/FavoritesService';
 import { Recipe } from "../models/Recipe.js";
 import { AppState } from "../AppState.js";
 import { onMounted, computed } from "vue";
-// import { Modal } from "bootstrap";
-// import { Account } from "../models/Account.js";
 import RecipeDetailsCard from "../components/RecipeDetailsCard.vue";
 import OffCanvas from '../components/Offcanvas.vue';
-// import { Offcanvas } from "bootstrap";
 
 export default {
 
@@ -68,36 +80,57 @@ export default {
 
 	setup(props) {
 
-    // const modalElement = ref(null)
-    // const modal = ref(null)
-
     onMounted(() => {
-      // modal.value = new Modal(modalElement.value)
+      
     })
     
 		return {
-      // modalElement,
-      // modal,
+
       account: computed(() => AppState.account),
+      flavorIts: computed(() => AppState.flavorIts),
+      
+      isFlavorIt(recipeId) {
+        if (AppState.flavorIts.find(f => f.id == recipeId)) {
+          return true
+        } else return false
+      },
 
       getRecipeById(recipeId) {
         try {
           logger.log('[GETTING RECIPE BY ID]')
           recipesService.getRecipeById(recipeId)
-          // Offcanvas.getOrCreateInstance('#offcanvasWithBothOptions').hide()
         } catch (error) {
           Pop.error(error.message)
           logger.log(error)
         }
       },
 
+      async addFlavorIt(recipeId) {
+        try {
+          await favoritesService.addFlavorIt(recipeId)
+          Pop.toast(`Added recipe to your Cookbook!`, 'success')
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+
+      async removeFlavorIt(recipeId) {
+        try {
+          await recipesService.removeFlavorIt(recipeId)
+          Pop.toast(`${props.recipe.title} was removed from your Cookbook`, 'success')
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
       
 			async deleteRecipe() {
 				try {
 					if (await Pop.confirm(`Are you sure you want to delete ${props.recipe.title}?`)) {
              recipesService.deleteRecipe(props.recipe.id)
           }
-					Pop.toast(`Did not delete ${props.recipe.title}`, 'success')
+					// Pop.toast(`${props.recipe.title} has been deleted!`, 'success')
 				} catch (error) {
 					logger.error(error)
 					Pop.toast(error.message, 'error')
@@ -161,7 +194,7 @@ body {
 }
 
 .card-hover__content {
-  padding-top: 10px !important;
+  padding-top: 27px !important;
 }
 
 .card-hover {

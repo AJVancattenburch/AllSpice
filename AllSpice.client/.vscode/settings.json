@@ -18,5 +18,8 @@
     "titleBar.inactiveBackground": "#93e5c899",
     "titleBar.inactiveForeground": "#15202b99"
   },
-  "peacock.color": "#93e5c8"
+  "peacock.color": "#93e5c8",
+  "cSpell.words": [
+    "Flavorite"
+  ]
 }

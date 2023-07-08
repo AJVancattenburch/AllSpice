@@ -12,8 +12,8 @@
               <option value="Starters">Starters</option>
               <option value="Mexican">Mexican</option>
               <option value="Italian">Italian</option>
-              <option value="Salad">American</option>
-              <option value="Bread">Chinese</option>
+              <option value="American">American</option>
+              <option value="Chinese">Chinese</option>
               <option value="Soup">Soup</option>
               <option value="Cheese">Cheese</option>
               <option value="Dessert">Dessert</option>
@@ -62,7 +62,7 @@
                   <input type="text" id="quantity" minlength="3" maxlength="15" name="quantity" class="form-control qty-input" v-model="editableIngredient.quantity" required>
                 </div>
                 <div class="col-1 justify-content-center align-items-center">
-                  <input type="checkbox" id="optional" name="optional" class="form-check-input" @change="addIngredientToRecipe()">
+                  <input type="checkbox" id="optional" name="optional" class="form-check-input" @change="createIngredient()">
                 </div>
               </div>
             </div>
@@ -136,7 +136,7 @@ export default {
         previewUploadedImg.value = AppState.activeRecipe.img
       }
       if (AppState.activeRecipe) {
-        editableIngredient.value = { ...AppState.activeRecipe }
+        editableIngredient.value = { ...AppState.ingredients }
       }
     })
 
@@ -152,7 +152,10 @@ export default {
           logger.log(editable.value)
           const recipeData = editable.value
           await recipesService.createRecipe(recipeData)
+          // const ingredientData = editableIngredient.value
+          // await ingredientsService.createIngredient(ingredientData)
           editableIngredient.value = {};
+
           Offcanvas.getOrCreateInstance('#offcanvasWithBothOptions').hide()
           // router.push(
           //   { name:
@@ -173,7 +176,7 @@ export default {
         logger.log('changing the image preview', previewUploadedImg.value, editable.value.img)
       },
 
-      addIngredientToRecipe() {
+      async createIngredient() {
         editableIngredient.value = { ...editableIngredient.value }
         logger.log('adding ingredient to recipe', editableIngredient.value)
         Pop.toast(`${editableIngredient.value.name} added to recipe`)
@@ -182,6 +185,7 @@ export default {
       deleteIngredient(ingredientId) {
         logger.log('deleting ingredient', ingredientId)
         AppState.ingredients = AppState.ingredients.filter(i => i.id !== ingredientId)
+
         Pop.toast('Ingredient deleted')
       }
     }

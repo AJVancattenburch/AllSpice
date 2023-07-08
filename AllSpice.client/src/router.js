@@ -22,11 +22,11 @@ const routes = [
     component: loadPage('AccountPage'),
     beforeEnter: authGuard
   },
-  {
-    path: '/recipe/:recipeId',
-    name: 'RecipeDetails',
-    component: loadPage('RecipeDetailsPage')
-  }
+  // {
+  //   path: '/recipe/:recipeId',
+  //   name: 'RecipeDetails',
+  //   component: loadPage('RecipeDetailsPage')
+  // }
 ]
 
 export const router = createRouter({

@@ -63,13 +63,6 @@ export default {
   }
 }
 
-// watchEffect(() => {
-//   const ingredient = AppState.ingredients.find(i => i.id === AppState.selectedIngredient)
-//   if (ingredient) {
-//     AppState.recipe.ingredients.push(ingredient)
-//   }
-// })
-
 </script>
 
 <style scoped>

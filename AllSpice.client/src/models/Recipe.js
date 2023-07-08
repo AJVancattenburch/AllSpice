@@ -11,7 +11,7 @@ export class Recipe {
     this.rating = data.rating;
     this.image = data.img;
     this.instructions = data.instructions;
-    this.ingredients = AppState.ingredients.filter(i => i.recipeId === data.id);
+    
     this.servings = data.servings;
     this.prepTime = data.prepTime;
     this.cookTime = data.cookTime;
@@ -20,5 +20,8 @@ export class Recipe {
     this.createdBy = data.creator.name;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
+
+    // NOTE - WAS RETURNING INGREDIENTS THIS WAY (BELOW) BEFORE I REALIZED INGREDIENTS IS COMPLETELY SEPARATE FROM RECIPES
+    // this.ingredients = AppState.ingredients.filter(i => i.recipeId === data.id); 
   }
 }

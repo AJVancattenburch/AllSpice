@@ -4,7 +4,7 @@
     Launch demo modal
   </button>
   
-  <!-- Modal -->
+  <!-- STUB - MODAL -->
   <div v-if="recipe"
    class="modal fade" id="recipeDetailsModal" tabindex="-1" aria-labelledby="recipeDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -29,17 +29,12 @@
                     <h6 class="card-title text-center"> {{ recipe.title }} </h6>
                   </div>
                 </div>
-                  // SECTION * * * CARD BODY * * * ---------------
+                  <!-- SECTION * * * CARD BODY * * * ------------>
                   <div class="card-body" style="overflow-y: auto">
-                    
                     <p class="card-text"> {{ recipe.category }} </p>
-                    <!-- <p  v-if="recipe.instructions.length <= 20" class="card-text"></p>
-                    <div v-if="recipe?.id == account.id">
-        
-                    </div> -->
                     <p class="card-text">{{ recipe.instructions }}</p>
                   </div>
-                  // SECTION * * * CARD FOOTER * * * ----------------------------------------------
+                  <!-- SECTION * * * CARD FOOTER * * * ------------------------------------------->
                   <div class="card-footer row" style="background: inherit; border-color: inherit;">
                     <div class="col-12">
                       <p class="card-text">

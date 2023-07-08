@@ -1,6 +1,7 @@
 <template>
   
-  <button v-if="recipe" @click="getRecipeById(recipe.id)" class="offcanvas-button" style="position: absolute; top: 5.5rem; right: 2rem;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><span class="w-100 fs-6">Create Recipe</span>
+  <button class="" style="position: absolute; top: 5.5rem; right: 2rem;" type="button">
+  <span class="w-100 fs-6"></span>
     <svg width="79" height="46" viewBox="0 0 79 46" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_f_618_1123)">
       <path d="M42.9 2H76.5L34.5 44H2L42.9 2Z" fill="url(#paint0_linear_618_1123)"/>
@@ -21,39 +22,6 @@
 
 </template>
 
-<script>
-
-import { computed } from 'vue'
-import { AppState } from '../AppState'
-import { logger } from '../utils/Logger'
-import { recipesService } from '../services/RecipesService'
-import Pop from '../utils/Pop'
-
-export default {
-  
-  setup() {
-
-    return {
-
-      account: computed(() => AppState.account),
-      recipe: computed(() => AppState.activeRecipe),
-
-      getRecipeById(recipeId) {
-        try {
-          logger.log('[GETTING RECIPE BY ID]')
-          recipesService.getRecipeById(recipeId)
-        } catch (error) {
-          Pop.error(error.message)
-          logger.log(error)
-        }
-      }
-
-    }
-  }
-}
-
-</script>
-
 <style scoped lang="scss">
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
@@ -69,13 +37,11 @@ body {
 
 button {
   animation: 1.5s ease infinite alternate running shimmer;
-  background: linear-gradient
-  (90deg, #FFE27D 0%, #ffb05b 30%, #ff916c 85%);
+  background: linear-gradient(90deg, #FFE27D 0%, #ffb05b 30%, #ff916c 85%);
   background-size: 200% 100%;
   border: none;
 	border-radius: 6px;
-  box-shadow: -2px -2px 10px #ffe37e80, 
-              2px 2px 10px #ff620080;
+  box-shadow: -2px -2px 10px rgba(255, 227, 126, 0.5), 2px 2px 10px rgba(255, 98, 0, 0.5);
   color: #170F1E;
   cursor: pointer;
 	font-family: 'Inter', sans-serif;
@@ -114,8 +80,7 @@ button {
 @keyframes shimmer {
   to {
     background-size: 100% 100%;
-    box-shadow: -2px -2px 6px #ffe37e80, 
-                2px 2px 6px #9094ff80;
+    box-shadow: -2px -2px 6px rgba(255, 227, 126, 0.5), 2px 2px 6px rgba(144, 148, 255, 0.5);
   }
 }
 

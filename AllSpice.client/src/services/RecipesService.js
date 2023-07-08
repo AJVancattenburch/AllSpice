@@ -29,15 +29,15 @@ class RecipesService {
 
   async deleteRecipe(recipeId) {
     await api.delete(`api/recipes/${recipeId}`)
-    AppState.recipes = AppState.recipes.filter(r => r.id !== recipeId)
-    Pop.toast('Recipe Deleted!', 'success')
+    AppState.recipes = AppState.recipes.filter(r => r.id != recipeId)
   }
 
-
-
-
-
-
+  async editInstructions(steps) {
+    const res = await api.put(`api/recipes/${AppState.activeRecipe.id}`, steps)
+    AppState.activeRecipe.instructions = res.data.instructions
+    logger.log('[EDITED STEPS] =>', res.data)
+    Pop.toast('Recipe Updated!', 'success')
+  }
 
 }
 
