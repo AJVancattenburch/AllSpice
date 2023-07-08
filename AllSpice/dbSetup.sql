@@ -33,22 +33,22 @@ CREATE TABLE IF NOT EXISTS ingredients(
 /* DROP TABLE ingredients; */
 
 CREATE TABLE IF NOT EXISTS favorites(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   recipeId INT NOT NULL COMMENT 'Recipe Id',
   accountId VARCHAR(255) NOT NULL COMMENT 'Account Id',
   FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
   FOREIGN KEY (accountId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
 
-INSERT INTO recipes
+/* INSERT INTO recipes
   (title, instructions, img, category, archived, creatorId)
 VALUES
 ('Best Oven-Baked Chicken', 'Preheat oven to 425°F/220°C (200°C fan).
-Pound chicken to 1.5cm / 0.6″ at the thickest part; using a rolling pin, meat mallet or even your fist (key tip for even cooking + tender chicken). Mix Seasoning. Line tray with foil and baking / parchment paper. Place chicken upside down on tray. Drizzle chicken with about 1 tsp oil. Rub over with fingers. Sprinkle with Seasoning. Flip chicken. Drizzle with 1 tsp oil, rub with fingers, sprinkle with Seasoning, covering as much of the surface area as you can. Bake 18 minutes, or until surface is golden per photos and video, or internal temperature is 165°F/75°C using a meat thermometer. Remove from oven and immediately transfer chicken to serving plates. Wait 3 to 5 minutes before serving, garnished with freshly chopped parsley if desired. Pictured with a side of Garlic Butter Rice with Kale.', 'https://i.ibb.co/8PKj97g/oven-Baked-Chicken.jpg', 'American', false, '647fe77f07eaa2e6662ac239');
+Pound chicken to 1.5cm / 0.6″ at the thickest part; using a rolling pin, meat mallet or even your fist (key tip for even cooking + tender chicken). Mix Seasoning. Line tray with foil and baking / parchment paper. Place chicken upside down on tray. Drizzle chicken with about 1 tsp oil. Rub over with fingers. Sprinkle with Seasoning. Flip chicken. Drizzle with 1 tsp oil, rub with fingers, sprinkle with Seasoning, covering as much of the surface area as you can. Bake 18 minutes, or until surface is golden per photos and video, or internal temperature is 165°F/75°C using a meat thermometer. Remove from oven and immediately transfer chicken to serving plates. Wait 3 to 5 minutes before serving, garnished with freshly chopped parsley if desired. Pictured with a side of Garlic Butter Rice with Kale.', 'https://i.ibb.co/8PKj97g/oven-Baked-Chicken.jpg', 'American', false, '647fe77f07eaa2e6662ac239'); */
 
-DELETE FROM recipes WHERE id = LAST_INSERT_ID();
+/* DELETE FROM recipes WHERE id = LAST_INSERT_ID();
 
-DELETE FROM accounts WHERE id = '647fe77f07eaa2e6662ac239';
+DELETE FROM accounts WHERE id = '647fe77f07eaa2e6662ac239'; */
 
 
 SELECT 
@@ -56,7 +56,7 @@ SELECT
 FROM recipes 
 ORDER BY recipes.createdAt DESC;
 
-SELECT
+/* SELECT
 *
 FROM recipes
 JOIN accounts ON recipes.creatorId = accounts.id
@@ -94,12 +94,12 @@ JOIN ingredients ing
   ON rec.id = ing.recipeId
 JOIN accounts creator 
   ON rec.creatorId = creator.id;
-WHERE rec.id = '647fe77f07eaa2e6662ac239';
+WHERE rec.id = '647fe77f07eaa2e6662ac239'; */
 
 
 -- SECTION FAVORITES
 
-INSERT INTO favorites
+/* INSERT INTO favorites
   (accountId, recipeId)
 VALUES
   ('647fe77f07eaa2e6662ac239', LAST_INSERT_ID());
@@ -109,4 +109,4 @@ account
 FROM favorites favs
 JOIN accounts account
   ON account.id = fav.accountId
-WHERE fav.recipeId = 1;
+WHERE fav.recipeId = 1; */

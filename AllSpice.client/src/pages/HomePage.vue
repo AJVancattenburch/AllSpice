@@ -7,7 +7,12 @@
       <div class="col-12 justify-content-center align-items-center px-0">
         <img src="https://www.haushaltstipps.net/wp-content/uploads/gewuerzmischung-selber-machen.jpeg" class="hero-img" alt="hero-image">
         <button>
-          <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook" style="" alt="account-link">
+          <router-link :to="{ name: 'Account' }" v-if="user.isAuthenticated">
+            <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook" role="button" style="" alt="account-link">
+          </router-link>
+          <div v-else>
+            <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook inactive disabled" role="button" style="" alt="account-link">
+          </div>
         </button>
       </div>
       </div>
@@ -102,6 +107,7 @@ export default {
         return {
 
           filterBy,
+          user: computed(() => AppState.user),
           account: computed(() => AppState.account),
           recipes: computed(() => {
             if (!filterBy.value) {
@@ -175,11 +181,11 @@ export default {
   left: 45vw;
   right: 45vw;
   opacity: .9;
-  animation: makeEntrance 3s ease-out forwards;
+  animation: bounceInCookbook 3s ease-out forwards;
   transition: all .3s ease-in-out;
 }
 
-@keyframes makeEntrance {
+@keyframes bounceInCookbook {
   0% {
     transform: 
       translateX(250%) 

@@ -1,6 +1,6 @@
 <template>
   <!-- NOTE - OFFCANVAS [START] --------------->
-  <div class="offcanvas-body row" v-if="recipe">
+  <div class="offcanvas-body row" v-if="recipe" :key="recipe.id">
     <div class="card card-custom border-white border-0 my-5" style="max-height: 100vh; min-height: 50vh;">
       <button type="button" class="btn-close bg-light p-3" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-label="Close">
       </button>
@@ -33,8 +33,14 @@
                         <button class="btn save-edit-button"><i class="mdi mdi-book-edit text-light selectable fs-1" title="Confirm Changes"></i></button>
                       </div>
                     </form>
-      
-                    <div class="d-flex justify-content-end pt-3">
+
+                    <div class="row d-flex justify-content-end pt-3">
+                      <p v-if="isFlavorIt">
+                        <i @click="removeFlavorIt(recipe.id)" style="color: #ffab3d;" class="mdi mdi-star text-warning fs-1" title="FlavorIt Recipe"></i>
+                      </p>
+                      <p v-else>
+                        <i @click="addFlavorIt(recipe.id)" style="color: #ffab3d;" class="mdi mdi-star-outline text-warning fs-1" title="Not a FlavorIt Recipe"></i>
+                      </p>
                       <button v-if="recipe.creatorId == account.id && !editor" @click.stop="toggle()" type="button" class="edit-button btn">
                         Edit Instructions
                       </button>
@@ -136,6 +142,7 @@ import Pop from "../utils/Pop"
 import { logger } from '../utils/Logger'
 import { recipesService } from '../services/RecipesService.js'
 import { ingredientsService } from '../services/IngredientsService.js'
+import { favoritesService } from '../services/FavoritesService.js'
 
 export default {
   
@@ -143,7 +150,7 @@ export default {
     
     const editable = ref({});
     const editableSteps = ref({});
-    const isFlavorIt = computed(() => AppState.flavorIts.find(f => f.id == AppState.activeRecipe?.id));
+    const isFlavorIt = computed(() => AppState.flavorIts.find(f => f.favoriteId == AppState.activeRecipe.id));
 
     watchEffect(() => {
 
@@ -216,8 +223,28 @@ export default {
 					Pop.toast(error.message, 'error')
 				}
       },
+
       toggle() {
         AppState.editor = !AppState.editor;
+      },
+
+      async addFlavorIt() {
+        try {
+          await favoritesService.addFlavorIt();
+        }
+        catch (error) {
+          logger.log(error);
+          Pop.error(error.message);
+        }
+      },
+      async removeFlavorIt() {
+        try {
+          await favoritesService.removeFlavorIt(isFlavorIt.value);
+        }
+        catch (error) {
+          logger.log(error);
+          Pop.error(error.message);
+        }
       },
 
       }

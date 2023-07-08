@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="recipe" class="card-hover rounded-3">
+    <div v-if="recipe" :key="recipe?.id" class="card-hover rounded-3">
       <div class="card-hover__content">
         <h3 class="card-hover__title">
           Flavor Alert! <span> {{ recipe.title }} </span> is trending!
@@ -19,7 +19,7 @@
       </div>
 
       <!-- NOTE - ICON TO ADD/REMOVE A FAVORITE RECIPE TO/FROM USERS COOKBOOK -->
-      <div v-if="isFlavorIt(recipe.id)" class="row">
+      <div v-if="isFlavorIt" class="row">
         <div class="col-12 d-flex justify-content-start align-items-center">
           <i @click="removeFlavorIt(recipe.id)" class="mdi mdi-heart selectable fs-1" style="color: red; z-index: 2;"></i>
         </div>
@@ -88,12 +88,19 @@ export default {
 
       account: computed(() => AppState.account),
       flavorIts: computed(() => AppState.flavorIts),
-      
-      isFlavorIt(recipeId) {
-        if (AppState.flavorIts.find(f => f.id == recipeId)) {
+      // recipe: computed(() => AppState.activeRecipe),
+
+      isFlavorIt: computed(() =>{
+        if (AppState.flavorIts.find(f => f.id == AppState.activeRecipe.id)) {
           return true
         } else return false
-      },
+      }),
+      
+      // isFlavorIt(recipeId) {
+      //   if (AppState.flavorIts.find(f => f.id == recipeId)) {
+      //     return true
+      //   } else return false
+      // },
 
       getRecipeById(recipeId) {
         try {
@@ -118,7 +125,7 @@ export default {
       async removeFlavorIt(recipeId) {
         try {
           await recipesService.removeFlavorIt(recipeId)
-          Pop.toast(`${props.recipe.title} was removed from your Cookbook`, 'success')
+          Pop.toast(`${AppState.activeRecipe.title} was removed from your Cookbook`, 'success')
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

@@ -27,14 +27,14 @@ export default {
 
   setup() {
 
-    async function getAllIngredients() {
-      try {
-        logger.log('[GETTING INGREDIENTS]')
-        await recipesService.getAllIngredients()
-      } catch (error) {
-        logger.log(error)
-      }
-    }
+    // async function getAllIngredients() {
+    //   try {
+    //     logger.log('[GETTING INGREDIENTS]')
+    //     await recipesService.getAllIngredients()
+    //   } catch (error) {
+    //     logger.log(error)
+    //   }
+    // }
 
     async function getIngredientById(ingredientId) {
       try {
@@ -54,7 +54,7 @@ export default {
     }
 
     return {
-      getAllIngredients,
+      // getAllIngredients,
       getIngredientById,
       addIngredientToRecipe,
       account: computed(() => AppState.account),

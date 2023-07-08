@@ -9,7 +9,7 @@ export class Favorite {
   }
 }
 
-export class MyFavorites extends Recipe {
+export class FavoriteRecipe extends Recipe {
   constructor(data) {
     super(data)
     this.favoriteId = data.favoriteId
