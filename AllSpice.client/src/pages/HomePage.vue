@@ -4,9 +4,11 @@
 
   <section class="bg-panImg">
     <div class="row">
-      <div class="col-12 px-0">
+      <div class="col-12 justify-content-center align-items-center px-0">
         <img src="https://www.haushaltstipps.net/wp-content/uploads/gewuerzmischung-selber-machen.jpeg" class="hero-img" alt="hero-image">
-        <!-- <button class="btn btn-primary">sFDASD</button> -->
+        <button>
+          <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook" style="" alt="account-link">
+        </button>
       </div>
       </div>
     </section>
@@ -163,6 +165,53 @@ export default {
     background-position: right top;
   }   
 }
+
+.my-cookbook {
+  height: 14rem;
+  aspect-ratio: 1/1;
+  z-index: 1;
+  position: absolute;
+  top: 47vh;
+  left: 45vw;
+  right: 45vw;
+  opacity: .9;
+  animation: makeEntrance 3s ease-out forwards;
+  transition: all .3s ease-in-out;
+}
+
+@keyframes makeEntrance {
+  0% {
+    transform: 
+      translateX(250%) 
+      rotate(0deg) 
+      translateY(-100%);
+  }
+  50% {
+    transform: 
+      translateX(50%) 
+      rotate(-360deg) 
+      translateY(45%) 
+      scale(1, .5);
+  }
+  100% {
+    transform: 
+      translateX(0%) 
+      rotate(360deg) 
+      perspective(200px) 
+      rotateZ(30deg) 
+      translateY(0%) 
+      scale(1, .7);
+    filter: brightness(1.1);
+  }
+}
+
+.my-cookbook:hover {
+  opacity: 1;
+  transition: all .3s ease-in-out;
+}
+
+
+
 
 .btn-category {
   background-color: #ffb048d3;
