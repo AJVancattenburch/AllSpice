@@ -94,22 +94,6 @@
     </defs>
   </svg>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
 </template>
 
 <script>

@@ -39,6 +39,12 @@ class RecipesService {
     Pop.toast('Recipe Updated!', 'success')
   }
 
+  async searchRecipes(query) {
+    logger.log('[SEARCHING FOR RECIPES...]', query)
+    const res = await api.get(`api/recipes?query=${query}`)
+    AppState.recipes = res.data.map(r => new Recipe(r))
+  }
+
 }
 
 export const recipesService = new RecipesService()

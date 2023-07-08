@@ -4,6 +4,7 @@ import { reactive } from 'vue'
 export const AppState = reactive({
   user: {},
   editor: false,
+  query: '',
 
   /** @type {import('./models/Account.js').Account} */
   account: {},
