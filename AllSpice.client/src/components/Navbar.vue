@@ -76,7 +76,30 @@ import Pop from "../utils/Pop"
 
 export default {
   setup() {
-    return {}
+
+    const editable = ref('')
+
+    return {
+
+      editable,
+
+      async searchRecipes() {
+        try {
+          const searchTerm = editable.value
+            .split(' ')
+            .join('+')
+          logger.log("[SEARCH TERM] =>",searchTerm)
+          AppState.query = searchTerm
+          await recipesService.searchRecipes(searchTerm)
+          // router.push(
+          //   { name: 'Search' , params: { query: searchString }}
+          // )
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      }
+    }
   },
   components: { Login }
 }
