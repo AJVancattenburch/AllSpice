@@ -33,9 +33,10 @@
             <a class="nav-link disabled">Disabled</a>
           </li>
         </ul>
+    
         <form @submit.prevent="searchRecipes()" class="d-flex" role="search">
           <input type="search" class="form-control me-2" placeholder="Search Recipes..." aria-label="Search" v-model="editable">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <button class="btn btn-outline-success mx-1" type="submit">Search</button>
         </form>
       </div>
       <Login />
@@ -77,7 +78,10 @@ import Pop from "../utils/Pop"
 export default {
   setup() {
 
-    const editable = ref('')
+    const editable = ref({
+      value: '',
+      debounce: null
+    })
 
     return {
 

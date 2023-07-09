@@ -39,12 +39,20 @@ public class RecipesController : ControllerBase
   }
 
   [HttpGet]
-  public ActionResult<List<Recipe>> GetAllRecipes()
+  public ActionResult<List<Recipe>> GetAllRecipes(string query)
   {
     try
     {
-      List<Recipe> recipes = _recipesService.GetAllRecipes();
-      return Ok(recipes);
+      if (query == null)
+      {
+        List<Recipe> recipes = _recipesService.GetAllRecipes();
+        return Ok(recipes);
+      }
+      else
+      {
+        List<Recipe> recipes = _recipesService.SearchRecipes(query);
+        return Ok(recipes);
+      }
     }
     catch (Exception e)
     {

@@ -58,4 +58,10 @@ public class RecipesService
     _repo.UpdateRecipe(original);
     return original;
   }
+
+  internal List<Recipe> SearchRecipes(string query)
+  {
+    List<Recipe> recipes = _repo.SearchRecipes(query);
+    return recipes;
+  }
 }

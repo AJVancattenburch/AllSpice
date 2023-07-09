@@ -91,4 +91,26 @@ public class RecipesRepository
     string sql = "DELETE FROM recipes WHERE id = @recipeId LIMIT 1;";
     _db.Execute(sql, new { recipeId });
   }
+
+  internal List<Recipe> SearchRecipes(string query)
+  {
+    string sql = @"
+    SELECT 
+      recipes.*,
+      accounts.*
+    FROM recipes
+    JOIN accounts ON recipes.creatorId = accounts.id
+    WHERE recipes.title LIKE @query
+    OR recipes.instructions LIKE @query
+    OR recipes.category LIKE @query
+    OR accounts.name LIKE @query
+    ;";
+
+    List<Recipe> recipes = _db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
+    {
+      recipe.Creator = account;
+      return recipe;
+    }, new { query = $"%{query}%" }).ToList();
+      return recipes;
+  }
 }
