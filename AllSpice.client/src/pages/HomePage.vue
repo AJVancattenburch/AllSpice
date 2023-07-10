@@ -1,53 +1,72 @@
 <template>
 
-<section class="container-fluid">
+<section class="container-fluid bg-img">
+  
+  <section class="content">
 
-  <section class="bg-panImg">
-    <div class="row">
-      <div class="col-12 justify-content-center align-items-center px-0">
-        <img src="https://www.haushaltstipps.net/wp-content/uploads/gewuerzmischung-selber-machen.jpeg" class="hero-img" alt="hero-image">
-        <button>
-          <router-link :to="{ name: 'Account' }" v-if="user.isAuthenticated">
-            <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook" role="button" style="" alt="account-link">
-          </router-link>
-          <div v-else>
-            <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook inactive disabled" role="button" style="" alt="account-link">
-          </div>
-        </button>
-      </div>
+    <section class="bg-panImg">
+      <div class="row">
+        <div class="col-12 justify-content-center align-items-center px-0">
+          <img src="https://www.haushaltstipps.net/wp-content/uploads/gewuerzmischung-selber-machen.jpeg" class="hero-img" alt="hero-image">
+        </div>
       </div>
     </section>
-
-  <section>
-    <div class="row pt-0">
-      <div class="col-12 d-flex justify-content-center align-items-center mb-3 rounded px-3 pb-3">
-        <h1>Select your FlavorIt Category</h1>
+  
+    <section>
+      <div class="col-12 d-flex justify-content-center align-items-center" v-if="user.isAuthenticated">
+        <router-link :to="{ name: 'Account' }">
+          <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" title="My Cookbook" class="img-fluid my-cookbook" role="button" style="" alt="account-link">
+        </router-link>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 d-flex justify-content-center align-items-center mb-3 rounded p-3">
-        <button @click="filterBy = ''" class="col-1 btn btn-category mx-2">All</button>
-        <button @click="filterBy = 'Starters'" class="col-1 btn btn-category mx-2">Starters</button>
-        <button @click="filterBy = 'Mexican'" class="col-1 btn btn-category mx-2">Mexican</button>
-        <button @click="filterBy = 'Italian'" class="col-1 btn btn-category mx-2">Italian</button>
-        <button @click="filterBy = 'American'" class="col-1 btn btn-category mx-2">American</button>
-        <button @click="filterBy = 'Chinese'" class="col-1 btn btn-category mx-2">Chinese</button>
-        <button @click="filterBy = 'Soup'" class="col-1 btn btn-category mx-2">Soups</button>
-        <button @click="filterBy = 'Cheese'" class="col-1 btn btn-category mx-2">Cheese</button>
+  
+      <div v-else>
+        <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook inactive disabled" role="button" style="" alt="account-link">
       </div>
-    </div>
+  
+      <div class="col-12 d-flex justify-content-center align-items-center pt-4">
+        <CreateRecipeButton class="sticky button justify-content-center align-items-center fs-5" style="position: inherit; margin-top: -23rem; height: 60px; width: 200px; z-index: 1;" />
+      </div>
+  
+      <!-- <Offcanvas id="offcanvasWithBothOptions">
+        <CreateRecipeForm />
+      </Offcanvas> -->
+    </section>
+  
+    <section>
+      <div class="row pt-0">
+        <div class="col-12 d-flex justify-content-center align-items-center mb-3 rounded px-3 pb-3">
+          <h1>Select your FlavorIt Category</h1>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center mb-3 rounded p-3">
+          <button @click="filterBy = ''" class="col-1 btn btn-category mx-2">All</button>
+          <button @click="filterBy = 'Starters'" class="col-1 btn btn-category mx-2">Starters</button>
+          <button @click="filterBy = 'Mexican'" class="col-1 btn btn-category mx-2">Mexican</button>
+          <button @click="filterBy = 'Italian'" class="col-1 btn btn-category mx-2">Italian</button>
+          <button @click="filterBy = 'American'" class="col-1 btn btn-category mx-2">American</button>
+          <button @click="filterBy = 'Chinese'" class="col-1 btn btn-category mx-2">Chinese</button>
+          <button @click="filterBy = 'Soup'" class="col-1 btn btn-category mx-2">Soups</button>
+          <button @click="filterBy = 'Cheese'" class="col-1 btn btn-category mx-2">Cheese</button>
+        </div>
+      </div>
+  
+      <div class="row justify-content-center align-items-center">
+        <button @click="filterBy = 'Dessert'" class="col-1 btn btn-category mx-2">Desserts</button>
+        <button @click="filterBy = 'Specialty Coffee'" class="col-2 btn btn-category mx-2">Specialty Coffee</button>
+        <button @click="filterBy = 'Other'" class="col-1 btn btn-category mx-2">Other</button>
+      </div>
+    </section>
+  
     <div class="row justify-content-center align-items-center">
-      <button @click="filterBy = 'Dessert'" class="col-1 btn btn-category mx-2">Desserts</button>
-      <button @click="filterBy = 'Specialty Coffee'" class="col-2 btn btn-category mx-2">Specialty Coffee</button>
-      <button @click="filterBy = 'Other'" class="col-1 btn btn-category mx-2">Other</button>
+      <div class="col-12 col-md-4 p-5" v-for="(recipe, each) in recipes" :key="each.id">
+        <RecipeCard :recipe="recipe" />
+      </div>
     </div>
+
   </section>
 
-  <div class="row justify-content-center align-items-center">
-    <div class="col-12 col-md-4 p-5" v-for="(recipe, each) in recipes" :key="each.id">
-      <RecipeCard :recipe="recipe"/>
-    </div>
-  </div>
 </section>
 
 </template>
@@ -60,13 +79,19 @@ import { recipesService } from "../services/RecipesService.js"
 import { ingredientsService } from "../services/IngredientsService.js"
 import { AppState } from "../AppState.js"
 import RecipeCard from "../components/RecipeCard.vue"
+import CreateRecipeButton from "../components/CreateRecipeButton.vue"
+// import CreateRecipeForm from "../components/CreateRecipeForm.vue"
+// import Offcanvas from "../components/Offcanvas.vue"
 
 export default {
 
   name: "HomePage",
 
   components: {
-       RecipeCard
+       RecipeCard, 
+       CreateRecipeButton, 
+      //  CreateRecipeForm, 
+      //  Offcanvas
   },
 
     setup() {
@@ -115,6 +140,7 @@ export default {
             }
             return AppState.recipes.filter(r => r.category === filterBy.value)
           }),
+          allRecipes: computed(() => AppState.recipes),
 
 
         };
@@ -124,30 +150,26 @@ export default {
 
 <style scoped lang="scss">
 
-
 .container-fluid {
-  background-color: #ffcd8de6;
+  background-image: url(https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4236966/1820/1213/m1/fpnw/wm1/sogsvrlqh72xgiipezdauuzhs2sr0bybcel6505dy3y2aagtywzijgbxnisfyu46-.jpg?1522829692&s=01b060822bfbcbbb0623af512a70f03d);
+  background-blend-mode: color;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   height: 100%;
+  box-shadow: inset 0px 0px 40px 40px #ff514144;
 }
 
-
 .hero-img {
-  height: 75%;
+  height: 100%;
   width: 100%;
   object-fit: cover;
   background-repeat: repeat;
-  background-size: cover;
-  margin-bottom: -15rem;
+  margin-bottom: -10rem;
   margin-top: 0;
-  opacity: .9;
-}
-
-.hero-img:hover {
-  filter: blur(1px) brightness(1.1);
+  opacity: 1;
+  filter: drop-shadow(0px 0px 10px #3e0c0c);
 }
 
 .bg-panImg {
@@ -173,15 +195,12 @@ export default {
 }
 
 .my-cookbook {
-  height: 14rem;
+  height: 10rem;
   aspect-ratio: 1/1;
   z-index: 1;
-  position: absolute;
-  top: 47vh;
-  left: 45vw;
-  right: 45vw;
+  position: relative;
+  top: -15em;
   opacity: .9;
-  animation: bounceInCookbook 3s ease-out forwards;
   transition: all .3s ease-in-out;
 }
 
@@ -215,9 +234,6 @@ export default {
   opacity: 1;
   transition: all .3s ease-in-out;
 }
-
-
-
 
 .btn-category {
   background-color: #ffb048d3;

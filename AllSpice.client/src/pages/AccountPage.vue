@@ -1,7 +1,7 @@
 <template>
 
   <section class="container-fluid">
-    <CreateRecipeButton />
+    <CreateRecipeButton class="button" />
     <OffCanvas id="offcanvasWithBothOptions">
       <CreateRecipeForm />
     </OffCanvas>
@@ -65,7 +65,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style scoped from="src\components\CreateRecipeButton.vue">
 img {
   max-width: 100px;
 }

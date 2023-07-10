@@ -2,7 +2,7 @@ import { AppState } from '../AppState'
 import { Ingredient } from '../models/Ingredient'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
-import Pop from '../utils/Pop'
+// import Pop from '../utils/Pop'
 
 class IngredientsService {
 
@@ -15,8 +15,12 @@ class IngredientsService {
 
   async getIngredientsByRecipeId(recipeId) {
     const res = await api.get(`api/recipes/${recipeId}/ingredients`)
-    AppState.ingredients = res.data.map(i => new Ingredient(i))
-    logger.log('[INGREDIENTS BY RECIPE ID]', res.data)
+    if (res.data.length > 0) {
+      AppState.ingredients = res.data.map(i => new Ingredient(i));
+    } else {
+    AppState.ingredients.unshift( ...AppState.ingredients );
+    logger.log('[INGREDIENTS BY RECIPE ID] =>', res.data)
+    }
   }
 
   async createIngredient(newIngredient) {

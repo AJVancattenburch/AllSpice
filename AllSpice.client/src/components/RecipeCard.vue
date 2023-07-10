@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="recipe" :key="recipe?.id" class="card-hover rounded-3">
+    <div v-if="recipe" :key="recipe?.id" class="card-hover rounded-3" style="outline: 6px groove #ff3819a3; filter: brightness(.9)">
       <div class="card-hover__content">
         <h3 class="card-hover__title">
           Flavor Alert! <span> {{ recipe.title }} </span> is trending!
@@ -10,7 +10,7 @@
           <div class="card-hover__link">
 
             <!-- NOTE - OFFCANVAS BUTTON FOR RECIPE DETAILS CARD (OPENS THE OFFCANVAS ON LINE 34) ------------------------------>
-            <span @click="getRecipeById(recipe.id)" class="flavor-link offcanvas-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Recipe Details</span>
+            <span id="offcanvas-button" @click="getRecipeById(recipe.id)" class="flavor-link offcanvas-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Recipe Details</span>
             <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#281704">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>        
@@ -202,6 +202,10 @@ body {
 
 .card-hover__content {
   padding-top: 27px !important;
+}
+
+.card-hover:hover {
+  filter: brightness(1.1)
 }
 
 .card-hover {

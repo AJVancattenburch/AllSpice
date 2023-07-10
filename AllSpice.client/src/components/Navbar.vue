@@ -1,10 +1,10 @@
 <template>
 
-  <nav class="navbar navbar-expand-lg bg-body-dark" style="opacity: .9;">
+  <nav class="navbar navbar-expand-lg bg-nav" style="opacity: .9;">
     <div class="container-fluid">
       <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
         <div class="d-flex flex-column align-items-center">
-          <img alt="logo" src="../assets/img/cw-logo.png" height="45" />
+          <img alt="logo" src="https://i.pinimg.com/originals/20/f9/d0/20f9d0b7e5ace34d9693d81f3201b5c0.png" style="" height="45" />
         </div>
       </router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,11 +13,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active" style="color: aliceblue;" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Link</a>
           </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Dropdown
@@ -27,16 +28,14 @@
               <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
+
             </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
           </li>
         </ul>
     
         <form @submit.prevent="searchRecipes()" class="d-flex" role="search">
           <input type="search" class="form-control me-2" placeholder="Search Recipes..." aria-label="Search" v-model="editable">
-          <button class="btn btn-outline-success mx-1" type="submit">Search</button>
+          <button @click="" class="btn btn-outline-light mx-2" style="color: aliceblue; text-shadow: 1px 1px 1px black; box-shadow: 1px 1px 3px black; background-color: rgba(241, 255, 85, 0.721);" type="submit">Search</button>
         </form>
       </div>
       <Login />
@@ -78,10 +77,7 @@ import Pop from "../utils/Pop"
 export default {
   setup() {
 
-    const editable = ref({
-      value: '',
-      debounce: null
-    })
+    const editable = ref({})
 
     return {
 
@@ -115,13 +111,19 @@ a:hover {
 }
 
 .nav-link {
+  color: aliceblue;
   text-transform: uppercase;
 }
 
 .navbar-nav .router-link-exact-active {
+  color: aliceblue;
   border-bottom: 2px solid var(--bs-success);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+.bg-nav {
+  background-color: #e4320ae6;
 }
 
 @media screen and (min-width: 768px) {

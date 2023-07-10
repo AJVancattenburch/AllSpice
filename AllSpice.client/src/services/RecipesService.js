@@ -3,7 +3,7 @@ import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 import { Recipe } from '../models/Recipe'
 import Pop from "../utils/Pop.js"
-import { Modal } from "bootstrap"
+// import { Modal } from "bootstrap"
 
 class RecipesService {
 
@@ -20,7 +20,7 @@ class RecipesService {
   }
 
   async createRecipe(recipeData) {
-    logger.log('[GRABBING POST DATA => CREATE RECIPE]', recipeData)
+    logger.log('[GRABBING POST DATA => CREATED RECIPE]')
     const res = await api.post('api/recipes', recipeData)
     logger.log(res.data, `${recipeData}`)
     Pop.success(`${res.data.name} has been created!`)
@@ -44,7 +44,6 @@ class RecipesService {
     const res = await api.get(`api/recipes?query=${searchTerm}`)
     AppState.recipes = res.data.map(r => new Recipe(r))
   }
-
 }
 
 export const recipesService = new RecipesService()

@@ -41,7 +41,7 @@
               maxlength="5000" v-model="editable.instructions">
           </div>
 
-          <div class="col-9">
+          <!-- <div class="col-9">
             <div>
               <ul>
                 <li class="ingredient"><span class="d-flex justify-content-center">
@@ -66,7 +66,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         
         <button type="submit" class="button close-button fs-1" tabindex="4">Create Recipe &#187;</button>
 
@@ -102,7 +102,7 @@ import { ref, watchEffect, computed } from 'vue'
 import { logger } from '../utils/Logger'
 import Pop from '../utils/Pop'
 import { recipesService } from '../services/RecipesService'
-import { ingredientsService } from '../services/IngredientsService'
+// import { ingredientsService } from '../services/IngredientsService'
 import { AppState } from '../AppState'
 import { Offcanvas } from "bootstrap"
 // import { router } from "../router.js"
@@ -112,22 +112,22 @@ export default {
   setup() {
 
     const editable = ref({})
-    const editableIngredient = ref({})
+    // const editableIngredient = ref({})
     const previewUploadedImg = ref(null)
 
     watchEffect(() => {
       if (AppState.activeRecipe) {
         previewUploadedImg.value = AppState.activeRecipe.img
       }
-      if (AppState.activeRecipe) {
-        editableIngredient.value = { ...AppState.ingredients }
-      }
+      // if (AppState.activeRecipe) {
+      //   editableIngredient.value = { ...AppState.ingredients }
+      // }
     })
 
     return {
 
       editable,
-      editableIngredient,
+      // editableIngredient,
       previewUploadedImg,
       ingredients: computed(() => AppState.ingredients),
 
@@ -138,7 +138,7 @@ export default {
           await recipesService.createRecipe(recipeData)
           // const ingredientData = editableIngredient.value
           // await ingredientsService.createIngredient(ingredientData)
-          editableIngredient.value = {};
+          editable.value = {};
 
           Offcanvas.getOrCreateInstance('#offcanvasWithBothOptions').hide()
           // router.push(
@@ -160,18 +160,18 @@ export default {
         logger.log('changing the image preview', previewUploadedImg.value, editable.value.img)
       },
 
-      async createIngredient() {
-        editableIngredient.value = { ...editableIngredient.value }
-        logger.log('adding ingredient to recipe', editableIngredient.value)
-        Pop.toast(`${editableIngredient.value.name} added to recipe`)
-      },
+      // async createIngredient() {
+      //   editableIngredient.value = { ...editableIngredient.value }
+      //   logger.log('adding ingredient to recipe', editableIngredient.value)
+      //   Pop.toast(`${editableIngredient.value.name} added to recipe`)
+      // },
 
-      deleteIngredient(ingredientId) {
-        logger.log('deleting ingredient', ingredientId)
-        AppState.ingredients = AppState.ingredients.filter(i => i.id !== ingredientId)
+      // deleteIngredient(ingredientId) {
+      //   logger.log('deleting ingredient', ingredientId)
+      //   AppState.ingredients = AppState.ingredients.filter(i => i.id !== ingredientId)
 
-        Pop.toast('Ingredient deleted')
-      }
+      //   Pop.toast('Ingredient deleted')
+      // }
     }
   }
 }
