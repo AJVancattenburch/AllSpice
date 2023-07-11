@@ -1,16 +1,20 @@
 <template>
 
+  <!-- SECTION - HERO IMAGE ------------------------------------>
+<div class="col-12 justify-content-center align-items-center">
+  <img src="../assets/img/bg-image.png" class="hero-img" alt="hero-image">
+</div>
+
+<!-- SECTION - BACKDROP IMAGE ------------>
 <section class="container-fluid bg-img">
-  
+
+  <!-- SECTION = BODY CONTENT -->
   <section class="content">
 
-    <section class="bg-panImg">
-      <div class="row">
-        <div class="col-12 justify-content-center align-items-center px-0">
-          <img src="../assets/img/bg-image.png" class="hero-img" alt="hero-image">
-        </div>
+      <div class="d-flex col-12 justify-content-end align-items-center">
+        <CreateRecipeButton class="sticky button justify-content-end align-items-center fs-5" style="position: relative; top: 2rem; z-index: 1;
+        outline: 4px ridge #6a13138d;" />
       </div>
-    </section>
   
     <section>
       <div class="col-12 d-flex justify-content-center align-items-center" v-if="user.isAuthenticated">
@@ -18,23 +22,24 @@
           <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" title="My Cookbook" class="img-fluid my-cookbook" role="button" style="" alt="account-link">
         </router-link>
       </div>
-  
       <div v-else>
         <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook inactive disabled" role="button" style="" alt="account-link">
       </div>
   
       
-      <!-- <Offcanvas id="offcanvasWithBothOptions">
+      <Offcanvas id="offcanvasWithBothOptions">
         <CreateRecipeForm />
-      </Offcanvas> -->
+      </Offcanvas>
+
+      <div>
+        <SearchRecipesOffcanvas id="myOffcanvas" style="z-index: 0;" />
+      </div>
+        
     </section>
-    <div class="d-flex justify-content-center align-items-center pt-4">
-      <CreateRecipeButton class="sticky button justify-content-center align-items-center fs-5" style="position: center; margin-top: 34rem; left: 50%; height: 60px; width: 200px; z-index: 1; transform: translateX(-50%)" />
-    </div>
 
     <section style="margin-top: 0rem;">
       <div class="row pt-0">
-        <div class="col-12 d-flex justify-content-center align-items-center mb-3 rounded px-3 pb-3">
+        <div class="col-12 recipe-header d-flex justify-content-center align-items-center mb-3 rounded px-3 pb-3">
           <h1>Select your FlavorIt Category</h1>
         </div>
       </div>
@@ -61,7 +66,7 @@
     </section>
   
     <div class="row justify-content-center align-items-center">
-      <div class="col-12 col-md-4 p-5" v-for="(recipe, each) in recipes" :key="each.id">
+      <div class="col-12 col-md-4 p-1" v-for="(recipe, each) in recipes" :key="each.id">
         <RecipeCard :recipe="recipe" />
       </div>
     </div>
@@ -69,6 +74,20 @@
   </section>
 
 </section>
+
+
+<!-- <div class="modal-header">
+  <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-primary">Understood</button>
+</div> -->
+
 
 </template>
 
@@ -81,18 +100,28 @@ import { ingredientsService } from "../services/IngredientsService.js"
 import { AppState } from "../AppState.js"
 import RecipeCard from "../components/RecipeCard.vue"
 import CreateRecipeButton from "../components/CreateRecipeButton.vue"
-// import CreateRecipeForm from "../components/CreateRecipeForm.vue"
-// import Offcanvas from "../components/Offcanvas.vue"
+import Offcanvas from '../components/Offcanvas.vue'
+import CreateRecipeForm from "../components/CreateRecipeForm.vue"
+import SearchRecipesOffcanvas from "../components/SearchRecipesOffcanvas.vue"
+import { Recipe } from "../models/Recipe.js"
 
 export default {
 
   name: "HomePage",
 
   components: {
-       RecipeCard, 
-       CreateRecipeButton, 
-      //  CreateRecipeForm, 
-      //  Offcanvas
+    RecipeCard, 
+    CreateRecipeButton,
+    Offcanvas,
+    CreateRecipeForm,
+    SearchRecipesOffcanvas
+  },
+
+  props: {
+    recipe: {
+      type: Recipe,
+      required: true
+    }
   },
 
     setup() {
@@ -160,52 +189,32 @@ export default {
   background-repeat: no-repeat;
   background-attachment: fixed;
   height: 100%;
+  width: 100%;
   box-shadow: inset 0px 0px 40px 40px #ff514144;
 }
 
 .hero-img {
-  height: 75%;
+  height: 75vh;
   width: 100%;
-  background-repeat: repeat;
-  margin-bottom: -10rem;
+  object-fit: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   margin-top: 0;
   opacity: 1;
   filter: drop-shadow(0px 0px 10px #3e0c0c);
-}
-
-.bg-panImg {
-  animation: panImg 30s ease-out infinite;
-}
-
-@keyframes panImg {
-  0%, 100% {
-    background-position: left top;
-  }
-
-  25% {
-    background-position: right bottom;
-  }
-
-  50% {
-    background-position: left bottom;
-  }
-
-  75% {
-    background-position: right top;
-  }   
 }
 
 .my-cookbook {
   height: 15rem;
   aspect-ratio: 1/1;
   z-index: 0;
-  position: center;
-  margin-top: -65rem;
-  left: 50%;
-  transform: translateX(50%);
-  opacity: .9;
+  position: absolute;
+  top: 15rem;
+  left: 43%;
+  right: 43%;
+  opacity: 0;
   transition: all .3s ease-in-out;
-  animation: slideInCookBook 2s ease-in-out forwards;
+  animation: slideInCookBook 2s ease-in-out .3s forwards;
 }
 
 @keyframes slideInCookBook {
@@ -254,12 +263,25 @@ export default {
   transition: all .3s ease-in-out;
 }
 
+.button {
+  position: grid;
+  top: -20rem;
+}
+
+.button:hover {
+  animation: tilt .5s ease-in-out forwards !important;
+}
+
+.recipe-header {
+  color: #9e2828;
+  text-shadow: 1.5px 1.5px 1px #281212;
+}
 
 
 .box select {
   background: linear-gradient(90deg, #FFE27D 0%, #ffb05b 30%, #ff916c 85%);
   background-color: #ffa06c;
-  color: rgb(158, 40, 40);
+  color: #9e2828;
   color: #170F1E;
   box-sizing: border-box;
   box-shadow: -2px -2px 5px #ff000080, 2px 2px 5px #ff955480;
@@ -325,15 +347,15 @@ export default {
 
 @keyframes tilt {
   0% {
-    transform: rotate(0deg) translateX(100%);
+    transform: rotateZ(0deg);
   }
 
   50% {
-    transform: rotate(-10deg) translateX(50%);
+    transform: rotateZ(-10deg);
   }
 
   100% {
-    transform: rotate(0deg) translateX(0%);
+    transform: rotateZ(-2deg);
   }
 }
 

@@ -108,11 +108,27 @@ body {
   &:active {
     transform: scale(0.95) rotate(-3deg);
   }
-
 }
 
-@keyframes shimmer {
-  to {
+.button:hover {
+  animation: 1.5s ease infinite alternate running shimmerAndTilt;
+}
+
+@keyframes shimmerAndTilt {
+  0% {
+    transform: rotate(0deg) translateX(100%);
+    background-size: 100% 100%;
+    box-shadow: -2px -2px 6px #ffe37e80, 
+                2px 2px 6px #9094ff80;
+  }
+  50% {
+    transform: rotate(-10deg) translateX(50%);
+    background-size: 200% 100%;
+    box-shadow: -2px -2px 10px #ffe37e80, 
+                2px 2px 10px #ff620080;
+  }
+  100% {
+    transform: rotate(0deg) translateX(0%);
     background-size: 100% 100%;
     box-shadow: -2px -2px 6px #ffe37e80, 
                 2px 2px 6px #9094ff80;

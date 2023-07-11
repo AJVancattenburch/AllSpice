@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="recipe" :key="recipe?.id" class="card-hover rounded-3" style="outline: 6px groove #ff3819a3; filter: brightness(.9)">
+    <div v-if="recipe" :key="recipe.id" class="card-hover rounded-3" style="outline: 6px groove #ff3819a3; filter: brightness(.9)">
       <div class="card-hover__content">
         <h3 class="card-hover__title">
           Flavor Alert! <span> {{ recipe.title }} </span> is trending!
@@ -8,9 +8,11 @@
         <p class="card-hover__text"> {{ recipe.description }} </p>
         <div class="text-center" style="text-shadow: 2px 2px 2px #000000;">
           <div class="card-hover__link">
-
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              Launch static backdrop modal
+            </button>
             <!-- NOTE - OFFCANVAS BUTTON FOR RECIPE DETAILS CARD (OPENS THE OFFCANVAS ON LINE 34) ------------------------------>
-            <span id="offcanvas-button" @click="getRecipeById(recipe.id)" class="flavor-link offcanvas-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Recipe Details</span>
+            <span id="offcanvas-button" @click="getRecipeById(recipe?.id)" class="flavor-link offcanvas-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Recipe Details</span>
             <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#281704">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>        
@@ -44,11 +46,12 @@
       </div>
       <img :src="recipe.image" :alt="recipe.title">
     </div>
+    
 
     <!-- NOTE - OPENS RECIPE DETAILS CARD VIA OFFCANVAS (BUTTON TO OPEN OFFCANVAS LOCATED ON LINE 13) -->
-    <OffCanvas id="offcanvasWithBothOptions" class="offcanvas offcanvas-xxl offcanvas-top">
+    <RecipeDetailsModal id="staticBackdrop" class="offcanvas offcanvas-xxl offcanvas-top">
       <RecipeDetailsCard />
-    </OffCanvas>
+    </RecipeDetailsModal>
 
 </template>
 
@@ -62,7 +65,7 @@ import { Recipe } from "../models/Recipe.js";
 import { AppState } from "../AppState.js";
 import { onMounted, computed } from "vue";
 import RecipeDetailsCard from "../components/RecipeDetailsCard.vue";
-import OffCanvas from '../components/Offcanvas.vue';
+import Offcanvas from "../components/Offcanvas.vue";
 
 export default {
 
@@ -75,7 +78,7 @@ export default {
 
   components: {
     RecipeDetailsCard, 
-    OffCanvas
+    Offcanvas
   },
 
 	setup(props) {
@@ -91,7 +94,7 @@ export default {
       // recipe: computed(() => AppState.activeRecipe),
 
       isFlavorIt: computed(() =>{
-      return AppState.myFlavorIts.find(f => f.id == props.recipe.id) ? AppState.myFlavorIts.find(f=>f.id ==props.recipe.id): AppState.flavorIts.find(f=>f.recipeId == props.recipe.id)
+      return AppState.myFlavorIts.find(f => f.id == props.recipe.id) ? AppState.myFlavorIts.find(f=>f.id == props.recipe.id): AppState.flavorIts.find(f=>f.recipeId == props.recipe.id)
       }),
       
       // isFlavorIt(recipeId) {
@@ -105,6 +108,7 @@ export default {
           logger.log('[GETTING RECIPE BY ID]')
           recipesService.getRecipeById(recipeId)
         } catch (error) {
+          Offcanvas.getOrCreateInstance('#offcanvasWithBothOptions').show()
           Pop.error(error.message)
           logger.log(error)
         }

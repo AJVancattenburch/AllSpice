@@ -6,6 +6,7 @@
       <CreateRecipeForm />
     </OffCanvas>
   </section>
+  
 </template>
 
 <script>

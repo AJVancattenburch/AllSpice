@@ -11,10 +11,10 @@ export class Recipe {
     this.rating = data.rating;
     this.image = data.img;
     this.instructions = data.instructions;
-    
     this.servings = data.servings;
     this.prepTime = data.prepTime;
     this.cookTime = data.cookTime;
+    this.popularity = data.popularity;
     this.totalTime = data.totalTime;
     this.archived = data.archived;
     this.createdBy = data.creator.name;

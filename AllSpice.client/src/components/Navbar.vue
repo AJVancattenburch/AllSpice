@@ -33,10 +33,10 @@
           </li>
         </ul>
     
-        <form @submit.prevent="searchRecipes()" class="d-flex" role="search">
+        <!-- <form @submit.prevent="searchRecipes()" class="d-flex" role="search">
           <input type="text" class="form-control me-2" placeholder="Search Recipes..." aria-label="Search" v-model="editable">
           <button @click="" class="btn btn-outline-light mx-2" style="color: aliceblue; text-shadow: 1px 1px 1px black; box-shadow: 1px 1px 3px black; background-color: rgba(241, 255, 85, 0.721);" type="submit">Search</button>
-        </form>
+        </form> -->
           <Login />
       </div>
     </div>
