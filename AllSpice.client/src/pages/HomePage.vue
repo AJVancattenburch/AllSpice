@@ -40,9 +40,9 @@
       </div>
   
       <div class="row justify-content-center align-items-center mb-5 pb-5">
-        <div class="col-4 d-flex justify-content-center align-items-center mb-3 rounded p-3 mb-5 pb-5">
-          <select v-model="filterBy" class="select-list text-center fs-3">
-            <option @click="filterBy = 'All'">All</option>
+        <div class="col-6 box d-flex justify-content-center align-items-center mb-3 rounded p-3">
+          <select v-model="filterBy" class="custom-dropdown select-list text-center">
+            <option @click="filterBy = ''" :value="''">All</option>
             <option @click="filterBy = 'Starters'">Starters</option>
             <option @click="filterBy = 'Mexican'">Mexican</option>
             <option @click="filterBy = 'Italian'">Italian</option>
@@ -57,7 +57,7 @@
           </select>
         </div>
       </div>
-      
+
     </section>
   
     <div class="row justify-content-center align-items-center">
@@ -252,6 +252,54 @@ export default {
 .my-cookbook:hover {
   filter: brightness(1.1);
   transition: all .3s ease-in-out;
+}
+
+
+
+.box select {
+  background: linear-gradient(90deg, #FFE27D 0%, #ffb05b 30%, #ff916c 85%);
+  background-color: #ffa06c;
+  color: rgb(158, 40, 40);
+  color: #170F1E;
+  box-sizing: border-box;
+  box-shadow: -2px -2px 5px #ff000080, 2px 2px 5px #ff955480;
+  text-shadow: 1px 1px 2px #fccccc;
+  padding: 12px;
+  width: 250px;
+  font-size: 20px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  -webkit-appearance: button;
+  appearance: button;
+  outline: none;
+  border: 3px ridge #170f1e72;
+  border-radius: .5rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: all .3s ease-in-out;
+}
+
+.box select::before {
+  content: "\f13a";
+  font-family: FontAwesome;
+  width: 20%;
+  height: 100%;
+  text-align: center;
+  font-size: 28px;
+  line-height: 45px;
+  color: #79535399;
+  background-color: #391b1bc5;
+  pointer-events: none;
+}
+
+.box select:hover::before {
+  color: #79535399;
+  background-color: #391b1bc5;
+}
+
+
+.box select.custom-dropdown>option {
+  padding: 30px;
+
 }
 
 .btn-category {
