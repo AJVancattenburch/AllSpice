@@ -7,8 +7,7 @@ public class Favorite
   public int RecipeId { get; set; }
 }
 
-// NOTE - THIS CREATES A MANY TO MANY RELATIONSHIP BETWEEN FAVORITES AND RECIPES
-public class FavoriteRecipe : Recipe
+public class FavoriteProfile : Profile
 {
   public int FavoriteId { get; set; }
 }

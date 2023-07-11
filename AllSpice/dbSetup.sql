@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS recipes(
   instructions TEXT NOT NULL COMMENT 'Recipe Instructions',
   img VARCHAR(500) COMMENT 'Recipe Picture',
   category VARCHAR(255) NOT NULL COMMENT 'Recipe Category',
+  tags VARCHAR(255),
+  popularity INT DEFAULT 0,
   archived BOOLEAN DEFAULT false COMMENT 'Recipe Archived',
   creatorId VARCHAR(255) NOT NULL,
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
@@ -20,7 +22,11 @@ CREATE TABLE IF NOT EXISTS recipes(
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
 
-/* DROP TABLE recipes; */
+DROP TABLE recipes;
+
+ALTER TABLE recipes 
+MODIFY COLUMN popularity INT DEFAULT 0;
+
 
 CREATE TABLE IF NOT EXISTS ingredients(
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,21 +36,24 @@ CREATE TABLE IF NOT EXISTS ingredients(
   FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
 
-/* DROP TABLE ingredients; */
+DROP TABLE ingredients;
 
 CREATE TABLE IF NOT EXISTS favorites(
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   recipeId INT NOT NULL COMMENT 'Recipe Id',
   accountId VARCHAR(255) NOT NULL COMMENT 'Account Id',
   FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
-  FOREIGN KEY (accountId) REFERENCES accounts(id) ON DELETE CASCADE
+  FOREIGN KEY (accountId) REFERENCES accounts(id) ON DELETE CASCADE,
+  UNIQUE (recipeId, accountId)
 ) default charset utf8 COMMENT '';
 
-/* INSERT INTO recipes
-  (title, instructions, img, category, archived, creatorId)
+DROP TABLE favorites;
+
+INSERT INTO recipes
+  (title, instructions, img, category, tags, popularity, archived, creatorId)
 VALUES
 ('Best Oven-Baked Chicken', 'Preheat oven to 425°F/220°C (200°C fan).
-Pound chicken to 1.5cm / 0.6″ at the thickest part; using a rolling pin, meat mallet or even your fist (key tip for even cooking + tender chicken). Mix Seasoning. Line tray with foil and baking / parchment paper. Place chicken upside down on tray. Drizzle chicken with about 1 tsp oil. Rub over with fingers. Sprinkle with Seasoning. Flip chicken. Drizzle with 1 tsp oil, rub with fingers, sprinkle with Seasoning, covering as much of the surface area as you can. Bake 18 minutes, or until surface is golden per photos and video, or internal temperature is 165°F/75°C using a meat thermometer. Remove from oven and immediately transfer chicken to serving plates. Wait 3 to 5 minutes before serving, garnished with freshly chopped parsley if desired. Pictured with a side of Garlic Butter Rice with Kale.', 'https://i.ibb.co/8PKj97g/oven-Baked-Chicken.jpg', 'American', false, '647fe77f07eaa2e6662ac239'); */
+Pound chicken to 1.5cm / 0.6″ at the thickest part; using a rolling pin, meat mallet or even your fist (key tip for even cooking + tender chicken). Mix Seasoning. Line tray with foil and baking / parchment paper. Place chicken upside down on tray. Drizzle chicken with about 1 tsp oil. Rub over with fingers. Sprinkle with Seasoning. Flip chicken. Drizzle with 1 tsp oil, rub with fingers, sprinkle with Seasoning, covering as much of the surface area as you can. Bake 18 minutes, or until surface is golden per photos and video, or internal temperature is 165°F/75°C using a meat thermometer. Remove from oven and immediately transfer chicken to serving plates. Wait 3 to 5 minutes before serving, garnished with freshly chopped parsley if desired. Pictured with a side of Garlic Butter Rice with Kale.', 'https://i.ibb.co/8PKj97g/oven-Baked-Chicken.jpg', 'American', 'chicken, oven, baked, best', 0, false, '647fe77f07eaa2e6662ac239');
 
 DELETE FROM recipes WHERE id = LAST_INSERT_ID();
 
@@ -58,7 +67,6 @@ CREATE TABLE IF NOT EXISTS comments(
   FOREIGN KEY (accountId) REFERENCES accounts(id) ON DELETE CASCADE,
   FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE
 )default charset utf8mb4 COMMENT '';
-
 
 SELECT 
 * 

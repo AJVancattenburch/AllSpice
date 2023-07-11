@@ -13,9 +13,9 @@ public class RecipesRepository
   {
     string sql = @"
     INSERT INTO recipes
-    (title, instructions, img, category, archived, creatorId)
+    (title, instructions, img, category, tags, archived, creatorId)
     VALUES
-    (@title, @instructions, @img, @category, @archived, @creatorId);
+    (@title, @instructions, @img, @category, @tags, @archived, @creatorId);
 
     SELECT 
       rec.*,
@@ -25,9 +25,9 @@ public class RecipesRepository
     WHERE rec.id = LAST_INSERT_ID()
     ;";
     
-    Recipe recipe = _db.Query<Recipe, Account, Recipe>(sql, (recipe, creator) =>
+    Recipe recipe = _db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
     {
-      recipe.Creator = creator;
+      recipe.Creator = account;
       return recipe;
     }, recipeData).FirstOrDefault();
       return recipe;
@@ -49,6 +49,26 @@ public class RecipesRepository
       return recipe;
     }).ToList();
       return recipes;
+  }
+
+  public List<Recipe> GetRecipesByCategory(string category)
+  {
+    string sql = @"
+      SELECT 
+        recipes.*,
+        accounts.*
+      FROM recipes
+      JOIN accounts ON recipes.creatorId = accounts.id
+      WHERE recipes.category = @category
+      ;";
+
+    List<Recipe> recipes = _db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
+    {
+        recipe.Creator = account;
+        return recipe;
+    }, new { category }).ToList();
+
+    return recipes;
   }
 
   internal Recipe GetRecipeById(int recipeId)
@@ -92,25 +112,35 @@ public class RecipesRepository
     _db.Execute(sql, new { recipeId });
   }
 
-  internal List<Recipe> SearchRecipes(string query)
+  internal List<Recipe> SearchRecipes(string category, string query)
   {
     string sql = @"
     SELECT 
-      recipes.*,
-      accounts.*
-    FROM recipes
-    JOIN accounts ON recipes.creatorId = accounts.id
-    WHERE recipes.title LIKE @query
-    OR recipes.instructions LIKE @query
-    OR recipes.category LIKE @query
-    OR accounts.name LIKE @query
+      rec.*,
+      creator.*
+    FROM recipes rec
+    JOIN accounts creator ON rec.creatorId = creator.id
+    WHERE rec.category = @category
+    AND rec.title LIKE @query
+    OR rec.instructions LIKE @query
+    OR rec.tags LIKE @query
+    OR creator.name LIKE @query
     ;";
 
     List<Recipe> recipes = _db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
     {
       recipe.Creator = account;
       return recipe;
-    }, new { query = $"%{query}%" }).ToList();
+    }, new { category, query = $"%{query}%" }).ToList();
       return recipes;
   }
+ 
+  //   List<Recipe> recipes = _db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
+  //   {
+  //     recipe.Creator = account;
+  //     return recipe;
+  //   }, new { query = $"%{query}%" }).ToList();
+  //     return recipes;
+  // }
+
 }

@@ -40,31 +40,27 @@ public class FavoritesService
     return myFavorites;
   }
 
+  internal Favorite GetFavoriteById(int favoriteId)
+  {
+    Favorite favorite = _repo.GetFavoriteById(favoriteId);
+    return favorite;
+  }
+
   internal void DeleteFavorite(int favoriteId, string userId)
   {
-    Favorite favoriteToDelete = GetFavoriteById(favoriteId);
+    Favorite favoriteToDelete = _repo.GetFavoriteById(favoriteId);
     if (favoriteToDelete == null)
     {
       throw new Exception("Invalid Favorite Id");
     }
     if (favoriteToDelete.AccountId != userId)
     {
-      throw new Exception("This is not your favorite");
+      throw new Exception("Unauthorized: You have not 'favorited' this recipe yet!");
     }
     int rows = _repo.DeleteFavorite(favoriteId);
     if (rows > 1)
     {
-      throw new Exception("Something has gone terribly wrong");
+      throw new Exception("Something has gone terribly wrong! Multiple favorites have been deleted!");
     }
-  }
-
-  internal Favorite GetFavoriteById(int favoriteId)
-  {
-    Favorite favorite = _repo.GetFavoriteById(favoriteId);
-    if (favorite == null)
-    {
-      throw new Exception("Invalid Favorite Id");
-    }
-    return favorite;
   }
 }

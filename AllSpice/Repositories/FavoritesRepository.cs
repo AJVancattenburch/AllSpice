@@ -1,6 +1,14 @@
 namespace AllSpice.Repositories;
 
-public class FavoritesRepository
+public class NewBaseType
+{
+  internal Favorite GetFavoriteByRecipeId(int recipeId)
+  {
+    throw new NotImplementedException();
+  }
+}
+
+public class FavoritesRepository : NewBaseType
 {
   private readonly IDbConnection _db;
 
@@ -70,7 +78,6 @@ public class FavoritesRepository
       return favorite;
     }, new { recipeId }).ToList();
     return favorite;
-
 }
 
   internal List<FavoriteRecipe> GetMyFavoriteRecipes(string accountId)

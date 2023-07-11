@@ -7,7 +7,7 @@
     <section class="bg-panImg">
       <div class="row">
         <div class="col-12 justify-content-center align-items-center px-0">
-          <img src="https://www.haushaltstipps.net/wp-content/uploads/gewuerzmischung-selber-machen.jpeg" class="hero-img" alt="hero-image">
+          <img src="../assets/img/bg-image.png" class="hero-img" alt="hero-image">
         </div>
       </div>
     </section>
@@ -23,40 +23,41 @@
         <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook inactive disabled" role="button" style="" alt="account-link">
       </div>
   
-      <div class="col-12 d-flex justify-content-center align-items-center pt-4">
-        <CreateRecipeButton class="sticky button justify-content-center align-items-center fs-5" style="position: inherit; margin-top: -23rem; height: 60px; width: 200px; z-index: 1;" />
-      </div>
-  
+      
       <!-- <Offcanvas id="offcanvasWithBothOptions">
         <CreateRecipeForm />
       </Offcanvas> -->
     </section>
-  
-    <section>
+    <div class="d-flex justify-content-center align-items-center pt-4">
+      <CreateRecipeButton class="sticky button justify-content-center align-items-center fs-5" style="position: center; margin-top: 34rem; left: 50%; height: 60px; width: 200px; z-index: 1; transform: translateX(-50%)" />
+    </div>
+
+    <section style="margin-top: 0rem;">
       <div class="row pt-0">
         <div class="col-12 d-flex justify-content-center align-items-center mb-3 rounded px-3 pb-3">
           <h1>Select your FlavorIt Category</h1>
         </div>
       </div>
   
-      <div class="row">
-        <div class="col-12 d-flex justify-content-center align-items-center mb-3 rounded p-3">
-          <button @click="filterBy = ''" class="col-1 btn btn-category mx-2">All</button>
-          <button @click="filterBy = 'Starters'" class="col-1 btn btn-category mx-2">Starters</button>
-          <button @click="filterBy = 'Mexican'" class="col-1 btn btn-category mx-2">Mexican</button>
-          <button @click="filterBy = 'Italian'" class="col-1 btn btn-category mx-2">Italian</button>
-          <button @click="filterBy = 'American'" class="col-1 btn btn-category mx-2">American</button>
-          <button @click="filterBy = 'Chinese'" class="col-1 btn btn-category mx-2">Chinese</button>
-          <button @click="filterBy = 'Soup'" class="col-1 btn btn-category mx-2">Soups</button>
-          <button @click="filterBy = 'Cheese'" class="col-1 btn btn-category mx-2">Cheese</button>
+      <div class="row justify-content-center align-items-center mb-5 pb-5">
+        <div class="col-4 d-flex justify-content-center align-items-center mb-3 rounded p-3 mb-5 pb-5">
+          <select v-model="filterBy" class="select-list text-center fs-3">
+            <option @click="filterBy = 'All'">All</option>
+            <option @click="filterBy = 'Starters'">Starters</option>
+            <option @click="filterBy = 'Mexican'">Mexican</option>
+            <option @click="filterBy = 'Italian'">Italian</option>
+            <option @click="filterBy = 'American'">American</option>
+            <option @click="filterBy = 'Chinese'">Chinese</option>
+            <option @click="filterBy = 'Soup'">Soups</option>
+            <option @click="filterBy = 'Cheese'">Cheese</option>
+            <option @click="filterBy = 'Salad'">Salads</option>
+            <option @click="filterBy = 'Dessert'">Desserts</option>
+            <option @click="filterBy = 'Specialty Coffee'">Specialty Coffee</option>
+            <option @click="filterBy = 'Other'">Other</option>
+          </select>
         </div>
       </div>
-  
-      <div class="row justify-content-center align-items-center">
-        <button @click="filterBy = 'Dessert'" class="col-1 btn btn-category mx-2">Desserts</button>
-        <button @click="filterBy = 'Specialty Coffee'" class="col-2 btn btn-category mx-2">Specialty Coffee</button>
-        <button @click="filterBy = 'Other'" class="col-1 btn btn-category mx-2">Other</button>
-      </div>
+      
     </section>
   
     <div class="row justify-content-center align-items-center">
@@ -97,6 +98,7 @@ export default {
     setup() {
 
       const filterBy = ref('')
+      const editable = ref({})
 
         async function getAllRecipes() {
             try {
@@ -131,7 +133,9 @@ export default {
 
         return {
 
+          editable,
           filterBy,
+
           user: computed(() => AppState.user),
           account: computed(() => AppState.account),
           recipes: computed(() => {
@@ -140,8 +144,6 @@ export default {
             }
             return AppState.recipes.filter(r => r.category === filterBy.value)
           }),
-          allRecipes: computed(() => AppState.recipes),
-
 
         };
     },
@@ -151,7 +153,7 @@ export default {
 <style scoped lang="scss">
 
 .container-fluid {
-  background-image: url(https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4236966/1820/1213/m1/fpnw/wm1/sogsvrlqh72xgiipezdauuzhs2sr0bybcel6505dy3y2aagtywzijgbxnisfyu46-.jpg?1522829692&s=01b060822bfbcbbb0623af512a70f03d);
+  background-image: url(https://wallpaperaccess.com/full/6361240.jpg);
   background-blend-mode: color;
   background-size: cover;
   background-position: center;
@@ -162,9 +164,8 @@ export default {
 }
 
 .hero-img {
-  height: 100%;
+  height: 75%;
   width: 100%;
-  object-fit: cover;
   background-repeat: repeat;
   margin-bottom: -10rem;
   margin-top: 0;
@@ -195,13 +196,31 @@ export default {
 }
 
 .my-cookbook {
-  height: 10rem;
+  height: 15rem;
   aspect-ratio: 1/1;
-  z-index: 1;
-  position: relative;
-  top: -15em;
+  z-index: 0;
+  position: center;
+  margin-top: -65rem;
+  left: 50%;
+  transform: translateX(50%);
   opacity: .9;
   transition: all .3s ease-in-out;
+  animation: slideInCookBook 2s ease-in-out forwards;
+}
+
+@keyframes slideInCookBook {
+  0% { 
+      opacity: 0;
+  }
+  100% {
+    transform: 
+      translateX(0%) 
+      perspective(200px) 
+      rotateZ(30deg)  
+      scale(1, .7);
+    filter: brightness(1.1);
+    opacity: .9;
+  }
 }
 
 @keyframes bounceInCookbook {
@@ -231,7 +250,7 @@ export default {
 }
 
 .my-cookbook:hover {
-  opacity: 1;
+  filter: brightness(1.1);
   transition: all .3s ease-in-out;
 }
 
@@ -258,15 +277,15 @@ export default {
 
 @keyframes tilt {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(0deg) translateX(100%);
   }
 
   50% {
-    transform: rotate(-10deg);
+    transform: rotate(-10deg) translateX(50%);
   }
 
   100% {
-    transform: rotate(0deg);
+    transform: rotate(0deg) translateX(0%);
   }
 }
 

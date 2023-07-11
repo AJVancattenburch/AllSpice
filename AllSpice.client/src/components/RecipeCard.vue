@@ -21,12 +21,12 @@
       <!-- NOTE - ICON TO ADD/REMOVE A FAVORITE RECIPE TO/FROM USERS COOKBOOK -->
       <div v-if="isFlavorIt" class="row">
         <div class="col-12 d-flex justify-content-start align-items-center">
-          <i @click="removeFlavorIt(recipe.id)" class="mdi mdi-heart selectable fs-1" style="color: red; z-index: 2;"></i>
+          <i @click="removeFlavorIt(recipe?.id)" class="mdi mdi-heart selectable fs-1" style="color: red; z-index: 2;"></i>
         </div>
       </div>
       <div v-else class="row">
         <div class="col-12 d-flex justify-content-start align-items-center">
-          <i @click="addFlavorIt(recipe.id)" class="mdi mdi-heart-outline selectable fs-1" style="color: white; z-index: 2;"></i>
+          <i @click="addFlavorIt(recipe?.id)" class="mdi mdi-heart-outline selectable fs-1" style="color: white; z-index: 2;"></i>
         </div>
       </div>
 
@@ -87,13 +87,11 @@ export default {
 		return {
 
       account: computed(() => AppState.account),
-      flavorIts: computed(() => AppState.flavorIts),
+      myFlavorIts: computed(() => AppState.myFlavorIts),
       // recipe: computed(() => AppState.activeRecipe),
 
       isFlavorIt: computed(() =>{
-        if (AppState.flavorIts.find(f => f.id == AppState.activeRecipe.id)) {
-          return true
-        } else return false
+      return AppState.myFlavorIts.find(f => f.id == props.recipe.id) ? AppState.myFlavorIts.find(f=>f.id ==props.recipe.id): AppState.flavorIts.find(f=>f.recipeId == props.recipe.id)
       }),
       
       // isFlavorIt(recipeId) {

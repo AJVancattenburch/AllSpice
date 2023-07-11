@@ -34,11 +34,11 @@
         </ul>
     
         <form @submit.prevent="searchRecipes()" class="d-flex" role="search">
-          <input type="search" class="form-control me-2" placeholder="Search Recipes..." aria-label="Search" v-model="editable">
+          <input type="text" class="form-control me-2" placeholder="Search Recipes..." aria-label="Search" v-model="editable">
           <button @click="" class="btn btn-outline-light mx-2" style="color: aliceblue; text-shadow: 1px 1px 1px black; box-shadow: 1px 1px 3px black; background-color: rgba(241, 255, 85, 0.721);" type="submit">Search</button>
         </form>
+          <Login />
       </div>
-      <Login />
     </div>
   </nav>
 
@@ -91,6 +91,7 @@ export default {
           logger.log("[SEARCH TERM] =>",searchTerm)
           AppState.query = searchTerm
           await recipesService.searchRecipes(searchTerm)
+          editable.value = ''
           // router.push(
           //   { name: 'Search' , params: { query: searchString }}
           // )
@@ -117,9 +118,11 @@ a:hover {
 
 .navbar-nav .router-link-exact-active {
   color: aliceblue;
+  position: relative;
   border-bottom: 2px solid var(--bs-success);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  z-index: 1;
 }
 
 .bg-nav {

@@ -1,5 +1,5 @@
 import { AppState } from '../AppState'
-import { FavoriteRecipe } from '../models/Favorite'
+import { Favorite, FavoriteRecipe } from '../models/Favorite'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 import Pop from '../utils/Pop'
@@ -7,20 +7,20 @@ class FavoritesService {
 
   async getMyFlavorIts() {
     const res = await api.get('account/favorites')
-    AppState.flavorIts = res.data.map(f => new FavoriteRecipe(f))
+    AppState.myFlavorIts = res.data.map(f => new FavoriteRecipe(f))
     logger.log('[MY FAVORITE RECIPES] =>', res.data)
   }
 
-  async addFlavorIt() {
+  async addFlavorIt(recipeId) {
     if (!AppState.account.id) {
       Pop.toast(`Log in to add this recipe to your favorites!`, 'error')
     } else {
-      const relatedId = AppState.activeRecipe.id
-      AppState.activeRecipe.value = { ...AppState.activeRecipe.value, relatedId }
-      const res = await api.post('api/favorites', { relatedId })
-      const newFlavorIt = new FavoriteRecipe(AppState.activeRecipe)
-      const foundFlavorIt = res.data.id
-      newFlavorIt.id = foundFlavorIt
+      // const relatedId = AppState.activeRecipe.id
+      // AppState.activeRecipe.value = { ...AppState.activeRecipe.value, relatedId }
+      const res = await api.post('api/favorites', { recipeId })
+      const newFlavorIt = new Favorite(res.data)
+      // const foundFlavorIt = res.data.id
+      // newFlavorIt.id = foundFlavorIt
       AppState.flavorIts.push(newFlavorIt)
       logger.log('[NEW FAVORITE RECIPE] =>', res.data)
     }

@@ -5,13 +5,15 @@ namespace AllSpice.Controllers;
 public class RecipesController : ControllerBase
 {
   private readonly RecipesService _recipesService;
+  private readonly RecipesRepository _repo;
   private readonly IngredientsService _ingredientsService;
   private readonly FavoritesService _favoritesService;
   private readonly Auth0Provider _auth;
 
-  public RecipesController(RecipesService recipesService, Auth0Provider auth, IngredientsService ingredientsService, FavoritesService favoritesService)
+  public RecipesController(RecipesService recipesService, RecipesRepository repo, Auth0Provider auth, IngredientsService ingredientsService, FavoritesService favoritesService)
   {
     _recipesService = recipesService;
+    _repo = repo;
     _auth = auth;
     _ingredientsService = ingredientsService;
     _favoritesService = favoritesService;
@@ -39,7 +41,7 @@ public class RecipesController : ControllerBase
   }
 
   [HttpGet]
-  public ActionResult<List<Recipe>> GetAllRecipes(string query)
+  public ActionResult<List<Recipe>> GetAllRecipes(string category, string query)
   {
     try
     {
@@ -50,7 +52,7 @@ public class RecipesController : ControllerBase
       }
       else
       {
-        List<Recipe> recipes = _recipesService.SearchRecipes(query);
+        List<Recipe> recipes = _recipesService.SearchRecipes(category, query);
         return Ok(recipes);
       }
     }
@@ -60,12 +62,40 @@ public class RecipesController : ControllerBase
     }
   }
 
+  // [HttpGet("categories")]
+  // public ActionResult<List<string>> GetRecipesByCategory(string category)
+  // {
+  //   try
+  //   {
+  //     if (category == null)
+  //     {
+  //       List<Recipe> recipes = _recipesService.GetAllRecipes();
+  //       return Ok(recipes);
+  //     }
+  //     else
+  //     {
+  //       List<Recipe> recipes = _recipesService.GetRecipesByCategory(category);
+  //       return Ok(recipes);
+  //     }
+  //   }
+  //   catch (Exception e)
+  //   {
+  //     return BadRequest(e.Message);
+  //   }
+  // }
+
   [HttpGet("{recipeId}")]
   public ActionResult<Recipe> GetRecipeById(int recipeId)
   {
     try
     {
       Recipe recipe = _recipesService.GetRecipeById(recipeId);
+      if (recipe == null)
+      {
+        throw new Exception("Invalid Recipe Id");
+      }
+      recipe.Popularity++;
+      _repo.UpdateRecipe(recipe);
       return Ok(recipe);
     }
     catch (Exception e)
@@ -86,6 +116,12 @@ public class RecipesController : ControllerBase
     {
       return BadRequest(e.Message);
     }
+  }
+
+  internal Favorite GetFavoriteById(int favoriteId)
+  {
+    Favorite favorite = _favoritesService.GetFavoriteById(favoriteId);
+    return favorite;
   }
 
   [HttpGet("{recipeId}/favorites")]

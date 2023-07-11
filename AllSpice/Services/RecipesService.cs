@@ -33,6 +33,12 @@ public class RecipesService
     return recipes;
   }
 
+  // public List<Recipe> GetRecipesByCategory(string category)
+  // {
+  //   return _repo.GetRecipesByCategory(category);
+  // }
+
+
   internal Recipe GetRecipeById(int recipeId)
   {
     Recipe recipe = _repo.GetRecipeById(recipeId);
@@ -53,15 +59,17 @@ public class RecipesService
 
     original.Title = updateRecipe.Title != null ? updateRecipe.Title : original.Title;
     original.Instructions = updateRecipe.Instructions != null ? updateRecipe.Instructions : original.Instructions;
-    original.img = updateRecipe.img != null ? updateRecipe.img : original.img;
-    original.category = updateRecipe.category != null ? updateRecipe.category : original.category;
+    original.Img = updateRecipe.Img != null ? updateRecipe.Img : original.Img;
+    original.Category = updateRecipe.Category != null ? updateRecipe.Category : original.Category;
+    original.Tags = updateRecipe.Tags != null ? updateRecipe.Tags : original.Tags;
+    original.Popularity = updateRecipe.Popularity == 0 ? original.Popularity : updateRecipe.Popularity;
     _repo.UpdateRecipe(original);
     return original;
   }
 
-  internal List<Recipe> SearchRecipes(string query)
+  internal List<Recipe> SearchRecipes(string category, string query)
   {
-    List<Recipe> recipes = _repo.SearchRecipes(query);
+    List<Recipe> recipes = _repo.SearchRecipes(category, query);
     return recipes;
   }
 }
