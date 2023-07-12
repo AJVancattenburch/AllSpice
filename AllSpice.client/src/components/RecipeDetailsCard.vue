@@ -1,8 +1,8 @@
 <template>
   <!-- NOTE - OFFCANVAS [START] --------------->
-  <div class="offcanvas-body row" v-if="recipe" :key="recipe.id">
+  <div class="offcanvas-body row" v-if="recipe" :key="recipe.id" style="">
     <div class="card card-custom border-white border-0 my-5" style="max-height: 100vh; min-height: 50vh;">
-      <button type="button" class="btn-close bg-light p-3" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-label="Close" data-bs-toggle="offcanvas">
+      <button type="button" class="btn-close bg-light p-3" style="" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-label="Close" data-bs-toggle="offcanvas">
       </button>
  
         <div class="card-custom-img m-2" :style="`background-image: url(${recipe.image})`">

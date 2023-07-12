@@ -14,7 +14,7 @@
     <RecipeDetailsCard />
   </OffCanvas>
 
-  <div>
+  <div class="myOffcanvas">
     <SearchRecipesOffcanvas id="myOffcanvas" class="myOffcanvas" style="" />
   </div>
 

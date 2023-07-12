@@ -1,6 +1,6 @@
 <template>
 
-  <div class="offcanvas offcanvas-fullscreen offcanvas-end" style="width: 1000px; height: 100vh;" data-bs-scroll="true" tabindex="-1"  aria-labelledby="offcanvasWithBothOptionsLabel">
+  <div class="offcanvas offcanvas-fullscreen offcanvas-end" style="width: 1000px; height: 100vh;" data-bs-scroll="true" tabindex="100"  aria-labelledby="offcanvasWithBothOptionsLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"></h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
