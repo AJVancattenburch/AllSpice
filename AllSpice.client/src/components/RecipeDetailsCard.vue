@@ -2,7 +2,7 @@
   <!-- NOTE - OFFCANVAS [START] --------------->
   <div class="offcanvas-body row" v-if="recipe" :key="recipe.id">
     <div class="card card-custom border-white border-0 my-5" style="max-height: 100vh; min-height: 50vh;">
-      <button type="button" class="btn-close bg-light p-3" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-label="Close">
+      <button type="button" class="btn-close bg-light p-3" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-label="Close" data-bs-toggle="offcanvas">
       </button>
  
         <div class="card-custom-img m-2" :style="`background-image: url(${recipe.image})`">
@@ -111,14 +111,14 @@
               <p class="card-text">
                 <small class="card-text" style="font-weight: 650;">
                   Last Updated on: {{ 
-                    new Date( recipe.createdAt )
+                    new Date( recipe.updatedAt )
                     .toLocaleDateString('en-US', {
                       year: 'numeric', 
                       month: 'short', 
                       day: 'numeric'
                     }) }}
                     @ {{ 
-                      new Date( recipe.createdAt )
+                      new Date( recipe.updatedAt )
                       .toLocaleTimeString('en-US', {
                         hour: 'numeric', 
                         minute: 'numeric'
@@ -239,17 +239,17 @@ export default {
       },
       async removeFlavorIt() {
         try {
-          await favoritesService.removeFlavorIt(isFlavorIt.value);
+          
+          if (await Pop.confirm(`Are you sure you want to remove ${AppState.activeRecipe.title} from your FlavorIts?`, 'This will remove it from your collection...', 'Remove', 'Cancel')) {
+            await favoritesService.removeFlavorIt(isFlavorIt.value);
+          }
         }
         catch (error) {
           logger.log(error);
           Pop.error(error.message);
         }
       },
-
-      }
-
-
+    }
   }
 }
 
@@ -257,6 +257,14 @@ export default {
 
 <style scoped lang="scss">
 
+
+.offcanvas-body {
+  min-height: 100vh;
+  background-color: #0000000e;
+  box-shadow: 0 0 15px 3px #0a0a0a9a;
+  border-radius: 5px;
+  color: #ffab3d;
+}
 .recipe-img {
   aspect-ratio: 1/.5;
   box-shadow: 0 0 15px 15px #000000;
@@ -264,6 +272,7 @@ export default {
 }
 
 .card-custom {
+  height: 100vh;
   color: #efefef;
   text-shadow: 0 1px 5px #998ce2;
   overflow: hidden;
@@ -276,6 +285,7 @@ export default {
 .card-custom-img {
   height: 200px;
   min-height: 200px;
+  background: transparent;
   background-color: #00000090;
   background-repeat: no-repeat;
   background-size: cover;

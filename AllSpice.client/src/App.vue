@@ -6,6 +6,18 @@
     <router-view />
   </main>
 
+  <Offcanvas id="offcanvasWithBothOptions">
+      <CreateRecipeForm />
+  </Offcanvas>
+
+  <OffCanvas  id="detailsOffcanvas" class="offcanvas offcanvas-xxl offcanvas-top">
+    <RecipeDetailsCard />
+  </OffCanvas>
+
+  <div>
+    <SearchRecipesOffcanvas id="myOffcanvas" class="myOffcanvas" style="" />
+  </div>
+
 </template>
 
 <script>
@@ -27,6 +39,10 @@ export default {
 
 :root{
   --main-height: calc(100vh - 32px - 64px);
+}
+
+.myOffcanvas {
+  width: 100vw;
 }
 
 

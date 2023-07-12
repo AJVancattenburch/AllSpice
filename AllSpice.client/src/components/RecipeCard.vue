@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="recipe" :key="recipe.id" class="card-hover rounded-3" style="outline: 6px groove #ff3819a3; filter: brightness(.9)">
+    <div v-if="recipe" :key="recipe?.id" class="card-hover rounded-3 m-auto" style="outline: 6px groove #ff3819a3; filter: brightness(.9)">
       <div class="card-hover__content">
         <h3 class="card-hover__title">
           Flavor Alert! <span> {{ recipe.title }} </span> is trending!
@@ -8,11 +8,9 @@
         <p class="card-hover__text"> {{ recipe.description }} </p>
         <div class="text-center" style="text-shadow: 2px 2px 2px #000000;">
           <div class="card-hover__link">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-              Launch static backdrop modal
-            </button>
-            <!-- NOTE - OFFCANVAS BUTTON FOR RECIPE DETAILS CARD (OPENS THE OFFCANVAS ON LINE 34) ------------------------------>
-            <span id="offcanvas-button" @click="getRecipeById(recipe?.id)" class="flavor-link offcanvas-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Recipe Details</span>
+
+            <!-- SECTION - OFFCANVAS BUTTON FOR RECIPE DETAILS CARD (OPENS THE OFFCANVAS ON LINE 34) ------------------------------>
+            <span id="offcanvas-button" @click="getRecipeById(recipe.id)" class="flavor-link offcanvas-button" type="button"  aria-controls="detailsOffcanvas">Recipe Details</span>
             <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#281704">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>        
@@ -20,7 +18,7 @@
         </div>
       </div>
 
-      <!-- NOTE - ICON TO ADD/REMOVE A FAVORITE RECIPE TO/FROM USERS COOKBOOK -->
+      <!-- SECTION - ICON TO ADD/REMOVE A FAVORITE RECIPE TO/FROM USERS COOKBOOK -->
       <div v-if="isFlavorIt" class="row">
         <div class="col-12 d-flex justify-content-start align-items-center">
           <i @click="removeFlavorIt(recipe?.id)" class="mdi mdi-heart selectable fs-1" style="color: red; z-index: 2;"></i>
@@ -46,12 +44,9 @@
       </div>
       <img :src="recipe.image" :alt="recipe.title">
     </div>
-    
 
-    <!-- NOTE - OPENS RECIPE DETAILS CARD VIA OFFCANVAS (BUTTON TO OPEN OFFCANVAS LOCATED ON LINE 13) -->
-    <RecipeDetailsModal id="staticBackdrop" class="offcanvas offcanvas-xxl offcanvas-top">
-      <RecipeDetailsCard />
-    </RecipeDetailsModal>
+    <!-- SECTION - OPENS RECIPE DETAILS CARD VIA OFFCANVAS (BUTTON TO OPEN OFFCANVAS LOCATED ON LINE 13) -->
+  
 
 </template>
 
@@ -64,8 +59,9 @@ import { favoritesService } from '../services/FavoritesService';
 import { Recipe } from "../models/Recipe.js";
 import { AppState } from "../AppState.js";
 import { onMounted, computed } from "vue";
-import RecipeDetailsCard from "../components/RecipeDetailsCard.vue";
-import Offcanvas from "../components/Offcanvas.vue";
+// import RecipeDetailsCard from "../components/RecipeDetailsCard.vue";
+// import OffCanvas from '../components/Offcanvas.vue';
+import { Offcanvas } from "bootstrap";
 
 export default {
 
@@ -76,10 +72,10 @@ export default {
     }
   },
 
-  components: {
-    RecipeDetailsCard, 
-    Offcanvas
-  },
+  // components: {
+  //   RecipeDetailsCard, 
+  //   OffCanvas
+  // },
 
 	setup(props) {
 
@@ -94,7 +90,7 @@ export default {
       // recipe: computed(() => AppState.activeRecipe),
 
       isFlavorIt: computed(() =>{
-      return AppState.myFlavorIts.find(f => f.id == props.recipe.id) ? AppState.myFlavorIts.find(f=>f.id == props.recipe.id): AppState.flavorIts.find(f=>f.recipeId == props.recipe.id)
+      return AppState.myFlavorIts.find(f => f.id == props.recipe.id) ? AppState.myFlavorIts.find(f=>f.id ==props.recipe.id) : AppState.flavorIts.find(f=>f.recipeId == props.recipe.id)
       }),
       
       // isFlavorIt(recipeId) {
@@ -106,9 +102,9 @@ export default {
       getRecipeById(recipeId) {
         try {
           logger.log('[GETTING RECIPE BY ID]')
+          Offcanvas.getOrCreateInstance('#detailsOffcanvas').show()
           recipesService.getRecipeById(recipeId)
         } catch (error) {
-          Offcanvas.getOrCreateInstance('#offcanvasWithBothOptions').show()
           Pop.error(error.message)
           logger.log(error)
         }
@@ -126,7 +122,9 @@ export default {
 
       async removeFlavorIt(recipeId) {
         try {
+          if (await Pop.confirm(`Are you sure you want to remove ${props.recipe.title} from your FlavorIts?`, 'This will remove it from your collection...', 'Remove', 'Cancel')) {
           await recipesService.removeFlavorIt(recipeId)
+          }
           Pop.toast(`${AppState.activeRecipe.title} was removed from your Cookbook`, 'success')
         } catch (error) {
           logger.error(error)

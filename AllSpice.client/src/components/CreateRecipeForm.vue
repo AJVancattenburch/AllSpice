@@ -31,7 +31,12 @@
             <input type="url" id="imgUrl" name="imgUrl" class="form-control" required minlength="5" maxlength="500" v-model="editable.img" @input="showImg()">
             <div class="d-flex flex-column justify-content-center">
               <p class="text-muted text mb-0 recipe-text">Image Preview</p>
-              <img :src="previewUploadedImg" v-if="previewUploadedImg" class="recipe-img" alt="The selected photo for your recipe">
+              <div v-if="previewUploadedImg">
+                <img :src="previewUploadedImg" class="recipe-img" alt="The selected photo for your recipe">
+              </div>
+              <div v-else>
+                <img src="//placehold.it/300x250" class="recipe-img" alt="The selected photo for your recipe">
+              </div>
             </div>
           </div>
         

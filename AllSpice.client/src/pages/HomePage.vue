@@ -11,11 +11,10 @@
   <!-- SECTION = BODY CONTENT -->
   <section class="content">
 
-      <div class="d-flex col-12 justify-content-end align-items-center">
-        <CreateRecipeButton class="sticky button justify-content-end align-items-center fs-5" style="position: relative; top: 2rem; z-index: 1;
-        outline: 4px ridge #6a13138d;" />
-      </div>
-  
+    <div class="d-flex col-12 justify-content-end align-items-center">
+      <CreateRecipeButton class="sticky button justify-content-end align-items-center fs-5" style="position: relative; top: 2rem; z-index: 0; outline: 4px ridge #6a13138d;" />
+    </div>
+
     <section>
       <div class="col-12 d-flex justify-content-center align-items-center" v-if="user.isAuthenticated">
         <router-link :to="{ name: 'Account' }">
@@ -25,25 +24,15 @@
       <div v-else>
         <img src="https://cdn4.iconfinder.com/data/icons/kitchen-129/64/25_book_recipes_recipe_kitchen_cook_cooking_food-512.png" class="img-fluid my-cookbook inactive disabled" role="button" style="" alt="account-link">
       </div>
-  
-      
-      <Offcanvas id="offcanvasWithBothOptions">
-        <CreateRecipeForm />
-      </Offcanvas>
-
-      <div>
-        <SearchRecipesOffcanvas id="myOffcanvas" style="z-index: 0;" />
-      </div>
-        
     </section>
 
     <section style="margin-top: 0rem;">
-      <div class="row pt-0">
-        <div class="col-12 recipe-header d-flex justify-content-center align-items-center mb-3 rounded px-3 pb-3">
+      <div class="row justify-content-center align-items-center pt-0">
+        <div class="col-md-6 col-12 recipe-header text-center mb-3 rounded p-3">
           <h1>Select your FlavorIt Category</h1>
         </div>
       </div>
-  
+
       <div class="row justify-content-center align-items-center mb-5 pb-5">
         <div class="col-6 box d-flex justify-content-center align-items-center mb-3 rounded p-3">
           <select v-model="filterBy" class="custom-dropdown select-list text-center">
@@ -64,9 +53,9 @@
       </div>
 
     </section>
-  
+
     <div class="row justify-content-center align-items-center">
-      <div class="col-12 col-md-4 p-1" v-for="(recipe, each) in recipes" :key="each.id">
+      <div v-for="(recipe, each) in recipes" :key="each.id" class="col-12 col-md-4 m-auto my-3" style="">
         <RecipeCard :recipe="recipe" />
       </div>
     </div>
@@ -88,10 +77,10 @@
   <button type="button" class="btn btn-primary">Understood</button>
 </div> -->
 
-
 </template>
 
 <script>
+
 import { logger } from "../utils/Logger.js"
 import Pop from "../utils/Pop.js"
 import { onMounted, computed, ref, watchEffect } from "vue"
@@ -100,9 +89,6 @@ import { ingredientsService } from "../services/IngredientsService.js"
 import { AppState } from "../AppState.js"
 import RecipeCard from "../components/RecipeCard.vue"
 import CreateRecipeButton from "../components/CreateRecipeButton.vue"
-import Offcanvas from '../components/Offcanvas.vue'
-import CreateRecipeForm from "../components/CreateRecipeForm.vue"
-import SearchRecipesOffcanvas from "../components/SearchRecipesOffcanvas.vue"
 import { Recipe } from "../models/Recipe.js"
 
 export default {
@@ -112,9 +98,6 @@ export default {
   components: {
     RecipeCard, 
     CreateRecipeButton,
-    Offcanvas,
-    CreateRecipeForm,
-    SearchRecipesOffcanvas
   },
 
   props: {
@@ -124,59 +107,60 @@ export default {
     }
   },
 
-    setup() {
+  setup() {
 
-      const filterBy = ref('')
-      const editable = ref({})
+    const filterBy = ref('')
+    const editable = ref({})
 
-        async function getAllRecipes() {
-            try {
-                logger.log("[GETTING RECIPES]");
-                await recipesService.getAllRecipes();
-            }
-            catch (error) {
-                Pop.error(error.message);
-                logger.log(error);
-            }
+    async function getAllRecipes() {
+      try {
+        logger.log("[GETTING RECIPES]");
+        await recipesService.getAllRecipes();
+      }
+      catch (error) {
+        Pop.error(error.message);
+        logger.log(error);
+      }
+    }
+
+    async function getIngredientsByRecipeId(recipeId) {
+      try {
+        await ingredientsService.getIngredientsByRecipeId(recipeId)
+      } catch (error) {
+        logger.log(error)
+        Pop.error(error.message)
+      }
+    }
+
+    watchEffect(() => {
+      if (AppState.activeRecipe) {
+        AppState.ingredients = []
+        getIngredientsByRecipeId(AppState.activeRecipe.id)
+      }
+    })
+
+    onMounted(() => {
+      getAllRecipes();
+    });
+
+    return {
+
+      editable,
+      filterBy,
+
+      user: computed(() => AppState.user),
+      account: computed(() => AppState.account),
+
+      recipes: computed(() => {
+        if (!filterBy.value) {
+          return AppState.recipes
         }
-
-        async function getIngredientsByRecipeId(recipeId) {
-          try {
-            await ingredientsService.getIngredientsByRecipeId(recipeId)
-          } catch (error) {
-            logger.log(error)
-            Pop.error(error.message)
-          }
-        }
-
-        watchEffect(() => {
-          if (AppState.activeRecipe) {
-            AppState.ingredients = []
-            getIngredientsByRecipeId(AppState.activeRecipe.id)
-          }
-        })
-
-        onMounted(() => {
-            getAllRecipes();
-        });
-
-        return {
-
-          editable,
-          filterBy,
-
-          user: computed(() => AppState.user),
-          account: computed(() => AppState.account),
-          recipes: computed(() => {
-            if (!filterBy.value) {
-              return AppState.recipes
-            }
-            return AppState.recipes.filter(r => r.category === filterBy.value)
-          }),
-
-        };
-    },
+          return AppState.recipes.filter(r => r.category === filterBy.value)
+      })
+    }
+  }
 }
+
 </script>
 
 <style scoped lang="scss">
@@ -201,7 +185,6 @@ export default {
   background-repeat: no-repeat;
   margin-top: 0;
   opacity: 1;
-  filter: drop-shadow(0px 0px 10px #3e0c0c);
 }
 
 .my-cookbook {
@@ -214,7 +197,7 @@ export default {
   right: 43%;
   opacity: 0;
   transition: all .3s ease-in-out;
-  animation: slideInCookBook 2s ease-in-out .3s forwards;
+  animation: slideInCookBook 2s ease-in-out .7s forwards;
 }
 
 @keyframes slideInCookBook {
@@ -272,9 +255,13 @@ export default {
   animation: tilt .5s ease-in-out forwards !important;
 }
 
+h1,
 .recipe-header {
-  color: #9e2828;
-  text-shadow: 1.5px 1.5px 1px #281212;
+  font-size: 3rem;
+  color: #281212;
+  background-color: transparent;
+  text-shadow: 1.5px 15px 10px #9e2828;
+  filter: brightness(1.5) drop-shadow(0px 0px -5px #ff000080);
 }
 
 
@@ -289,7 +276,7 @@ export default {
   padding: 12px;
   width: 250px;
   font-size: 20px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 25px #00000033;
   -webkit-appearance: button;
   appearance: button;
   outline: none;

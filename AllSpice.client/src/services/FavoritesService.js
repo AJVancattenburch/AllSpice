@@ -26,11 +26,13 @@ class FavoritesService {
     }
   }
 
-  async removeFlavorIt(favoriteId) {
-    await api.delete(`account/favorites/${favoriteId}`)
+  async removeFlavorIt(recipeId) {
+    const res = await api.delete(`api/favorites/${recipeId}`)
+    logger.log('[REMOVED FAVORITE RECIPE] =>', res.data)
     const thisFlavorIt = AppState.flavorIts
-    const flavorItToRemove = thisFlavorIt.findIndex(f => f.id === favoriteId)
+    const flavorItToRemove = thisFlavorIt.findIndex(f => f.id === recipeId)
     thisFlavorIt.splice(flavorItToRemove, 1)
+    AppState.flavorIts = thisFlavorIt
   }
 }
 

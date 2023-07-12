@@ -14,7 +14,6 @@ export class Recipe {
     this.servings = data.servings;
     this.prepTime = data.prepTime;
     this.cookTime = data.cookTime;
-    this.popularity = data.popularity;
     this.totalTime = data.totalTime;
     this.archived = data.archived;
     this.createdBy = data.creator.name;

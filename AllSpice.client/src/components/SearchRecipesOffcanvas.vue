@@ -1,7 +1,6 @@
 <template>
 
 
-  <button class="btn btn-primary" style="" type="button" data-bs-toggle="offcanvas" data-bs-target="#myOffcanvas" aria-controls="myOffcanvas">Enable both scrolling & backdrop</button>
 
   <div class="offcanvas offcanvas-xl offcanvas-end bg-offcanvas px-0" data-bs-scroll="true" tabindex="-1" id="myOffcanvas" aria-labelledby="myOffcanvasLabel">
     <div class="offcanvas-header">
@@ -29,8 +28,8 @@
                 </div>
               </div>
 
-              <div class="row mt-5">
-                <div v-for="(recipe, each) in recipes" :key="each.id" class="col-12 d-flex justify-content-center align-items-center col-md-6 p-1 my-3">
+              <div class="row justify-content-center align-items-center mt-5">
+                <div v-for="(recipe, each) in recipes" :key="each.id" class="col-12 col-md-6 p-1 my-3">
                   <RecipeCard :recipe="recipe" />
                 </div>
               </div>
@@ -116,7 +115,6 @@ export default {
 
 .card-hover {
   margin-top: 1rem;
-  position: absolute;
 }
 
 </style>
