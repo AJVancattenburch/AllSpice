@@ -81,6 +81,7 @@ export default {
           await recipesService.searchRecipes(searchTerm)
           editable.value = ''
           Offcanvas.getOrCreateInstance('#myOffcanvas').show()
+          
           // router.push(
           //   { name: 'Search' , params: { query: searchString }}
           // )

@@ -62,6 +62,7 @@ import { onMounted, computed } from "vue";
 // import RecipeDetailsCard from "../components/RecipeDetailsCard.vue";
 // import OffCanvas from '../components/Offcanvas.vue';
 import { Offcanvas } from "bootstrap";
+import { ingredientsService } from "../services/IngredientsService.js";
 
 export default {
 
@@ -123,9 +124,10 @@ export default {
       async removeFlavorIt(recipeId) {
         try {
           if (await Pop.confirm(`Are you sure you want to remove ${props.recipe.title} from your FlavorIts?`, 'This will remove it from your collection...', 'Remove', 'Cancel')) {
-          await recipesService.removeFlavorIt(recipeId)
+            debugger
+          await favoritesService.removeFlavorIt(recipeId)
           }
-          Pop.toast(`${AppState.activeRecipe.title} was removed from your Cookbook`, 'success')
+          // Pop.toast(`${props.recipe.title} was removed from your Cookbook`, 'success')
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

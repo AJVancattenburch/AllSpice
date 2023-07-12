@@ -107,7 +107,6 @@ import { ref, watchEffect, computed } from 'vue'
 import { logger } from '../utils/Logger'
 import Pop from '../utils/Pop'
 import { recipesService } from '../services/RecipesService'
-// import { ingredientsService } from '../services/IngredientsService'
 import { AppState } from '../AppState'
 import { Offcanvas } from "bootstrap"
 // import { router } from "../router.js"

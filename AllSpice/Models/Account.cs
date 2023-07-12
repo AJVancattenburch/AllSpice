@@ -5,6 +5,7 @@ public class Profile
   public string Id { get; set; }
   public string Name { get; set; }
   public string Picture { get; set; }
+  public string Bio { get; set; }
 }
 
 // NOTE - THIS GIVES THE USER ACCOUNT ACCESS TO THE PROFILE CLASS WHILE LIMITING PRIVATE INFORMATION

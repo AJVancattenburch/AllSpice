@@ -23,8 +23,8 @@ class RecipesService {
     logger.log('[GRABBING POST DATA => CREATED RECIPE]')
     const res = await api.post('api/recipes', recipeData)
     logger.log(res.data, `${recipeData}`)
-    Pop.success(`${res.data.name} has been created!`)
-    return res.data
+    AppState.recipes.push(new Recipe(res.data))
+    Pop.success(`${res.data.title} has been created!`)
   }
 
   async deleteRecipe(recipeId) {

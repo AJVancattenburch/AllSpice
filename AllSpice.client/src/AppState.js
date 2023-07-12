@@ -21,7 +21,6 @@ export const AppState = reactive({
 
   /** @type {import('./models/Favorite.js').Favorite[]} */
   flavorIts: [],
-
   myFlavorIts: []
 
 

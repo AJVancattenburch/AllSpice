@@ -32,9 +32,9 @@ public class CommentsService
     return comments;
   }
 
-  internal Comment PostComment(Comment commentData)
+  internal Comment CreateComment(Comment commentData)
   {
-    Comment comment = _repo.PostComment(commentData);
+    Comment comment = _repo.CreateComment(commentData);
     return comment;
   }
 }

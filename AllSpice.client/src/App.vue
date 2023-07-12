@@ -21,13 +21,33 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { AppState } from './AppState'
 import Navbar from './components/Navbar.vue'
+import { Offcanvas } from 'bootstrap'
+import Pop from './utils/Pop'
+import { logger } from "./utils/Logger"
 
 export default {
   setup() {
+
+    async function openSearchRecipesOffcanvas() {
+      try {
+        await Offcanvas.getOrCreateInstance('#myOffcanvas').show()
+      } catch (error) {
+        logger.error(error)
+        Pop.toast(error.message, 'error')
+      }
+    }
+
+    watchEffect(() => {
+      if (AppState.query) {
+        openSearchRecipesOffcanvas()
+      }
+    })
+
     return {
+      openSearchRecipesOffcanvas,
       appState: computed(() => AppState)
     }
   },

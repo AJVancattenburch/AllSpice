@@ -3,6 +3,7 @@ import { Favorite, FavoriteRecipe } from '../models/Favorite'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 import Pop from '../utils/Pop'
+// import { AppState } from './../AppState';
 class FavoritesService {
 
   async getMyFlavorIts() {
@@ -27,12 +28,14 @@ class FavoritesService {
   }
 
   async removeFlavorIt(recipeId) {
-    const res = await api.delete(`api/favorites/${recipeId}`)
+
+const foundFlavorIt = AppState.myFlavorIts.find(f=>f.id==recipeId)
+    const res = await api.delete(`api/favorites/${foundFlavorIt.favoriteId}`)
     logger.log('[REMOVED FAVORITE RECIPE] =>', res.data)
-    const thisFlavorIt = AppState.flavorIts
-    const flavorItToRemove = thisFlavorIt.findIndex(f => f.id === recipeId)
-    thisFlavorIt.splice(flavorItToRemove, 1)
-    AppState.flavorIts = thisFlavorIt
+    // const thisFlavorIt = AppState.flavorIts
+    const flavorItToRemoveIndex = AppState.myFlavorIts.findIndex(f => f.id === recipeId)
+   AppState.myFlavorIts.splice(flavorItToRemoveIndex, 1)
+    // AppState.flavorIts = thisFlavorIt
   }
 }
 

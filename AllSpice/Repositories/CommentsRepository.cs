@@ -60,13 +60,13 @@ public class CommentsRepository
     return comments;
   }
 
-  internal Comment PostComment(Comment commentData)
+  internal Comment CreateComment(Comment commentData)
   {
     string sql = @"
     INSERT INTO comments
-    (accountId, recipeId, body)
+    (accountId, recipeId, title, photo, body, tags)
     VALUES
-    (@AccountId, @RecipeId, @Body);
+    (@accountId, @recipeId, @title, @photo, @body, @tags);
 
     SELECT
     comments.*,

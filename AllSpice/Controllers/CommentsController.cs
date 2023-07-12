@@ -44,13 +44,13 @@ public class CommentsController : ControllerBase
 
   [HttpPost]
   [Authorize]
-  public async Task<ActionResult<Comment>> PostComment([FromBody] Comment commentData)
+  public async Task<ActionResult<Comment>> CreateComment([FromBody] Comment commentData)
   {
     try
     {
       Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
       commentData.AccountId = userInfo.Id;
-      Comment comment = _commentsService.PostComment(commentData);
+      Comment comment = _commentsService.CreateComment(commentData);
       return Ok(comment);
     }
     catch (Exception e)
