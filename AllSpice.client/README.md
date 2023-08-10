@@ -30,4 +30,6 @@ I invite you to explore FlavorIt, savor its features, and see firsthand how tech
 
 ---
 
-<img src="https://i.ibb.co/khmMcqq/All-Spice-Image.jpg" style="width: 50%; height: auto; margin: auto;">
+<p align="center">
+  <a href="https://ibb.co/khmMcqq"><img src="https://i.ibb.co/jLJH433/All-Spice-Image.jpg" alt="All-Spice-Image" border="0"></a>
+</p>
